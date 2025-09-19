@@ -5,6 +5,6 @@
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
   "/not_authorized/page": "app/not_authorized/page.js",
-  "/page": "app/page.js",
+  "/projects/[id]/page": "app/projects/[id]/page.js",
   "/projects/page": "app/projects/page.js"
 }

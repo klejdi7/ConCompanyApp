@@ -129,8 +129,8 @@ return (
 					<ul className="list-group">
 						{projects.map((p) => (
 							<li key={p.id} className="list-group-item">
-							<strong>{p.name}</strong> — {p.location} <br />
-							Offer: ${p.offer} • Total: ${p.total}
+								<strong>{p.name}</strong> — {p.location} <br />
+								Offer: ${p.offer} • Total: ${p.total}
 							</li>
 						))}
 					</ul>

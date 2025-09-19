@@ -5,6 +5,47 @@ import { authMiddleware } from "../middleware/auth.js";
 const router = express.Router();
 const prisma = new PrismaClient();
 
+export async function addOrCreateExpense(expenseId, expenseName, categoryName) {
+
+	// If expenseId is provided, just use it
+	if (expenseId) return expenseId;
+
+	if (!expenseName || !categoryName) {
+		throw new Error("New expense requires name and category");
+	}
+
+	// 1️⃣ Check if category exists, else create
+	let category = await prisma.expenseCategories.findFirst({
+		where: { name: categoryName },
+	});
+	if (!category) {
+		category = await prisma.expenseCategories.create({
+			data: { name: categoryName },
+		});
+	}
+
+	// 2️⃣ Check if an expense with this name already exists under this category
+	let expense = await prisma.expenses.findFirst({
+		where: {
+			name: expenseName,
+			expenseCatId: category.id,
+		},
+	});
+
+	// 3️⃣ If not found, create it
+	if (!expense) {
+		expense = await prisma.expenses.create({
+			data: {
+				name: expenseName,
+				expenseCatId: category.id,
+			},
+		});
+	}
+
+	return expense.id;
+}
+
+
 /*
 Employees CRUD
 */
@@ -52,31 +93,62 @@ router.get("/projects", authMiddleware, async (req, res) => {
 	res.json(list);
 });
 
-router.get("/projects/:id", authMiddleware, async (req, res) => {
-	const id = Number(req.params.id);
-	const p = await prisma.project.findUnique({
-		where: { id },
-		include: { employees: { include: { employee: true } }, expenses: true, invoices: true },
-	});
-	res.json(p);
-});
-
 router.post("/projects", authMiddleware, async (req, res) => {
-	const { name, location, description, offer, total } = req.body;
+	const { name, location, description } = req.body;
 	const project = await prisma.project.create({
-		data: { name, location, description, offer: offer ? Number(offer) : null, total: total ? Number(total) : null },
+		data: { name, location, description },
 	});
 	res.json(project);
+});
+
+router.get("/projects/:id", authMiddleware, async (req, res) => {
+	const id = Number(req.params.id);
+
+	try {
+		const project = await prisma.project.findUnique({
+			where: { id },
+			include: {
+				employees: {
+					include: { employee: true },
+				},
+				invoices: true,
+				ProjectExpenses: {
+					include: { expenses: { include: { expenseCategories: true } } },
+				},
+				ProjectOffers: true,
+			},
+		});
+
+		if (!project) {
+			return res.status(404).json({ message: "Project not found" });
+		}
+
+		res.json(project);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: "Failed to fetch project details" });
+	}
 });
 
 router.put("/projects/:id", authMiddleware, async (req, res) => {
-	const id = Number(req.params.id);
-	const { name, location, description, offer, total } = req.body;
-	const project = await prisma.project.update({
-		where: { id },
-		data: { name, location, description, offer: offer ? Number(offer) : null, total: total ? Number(total) : null },
-	});
-	res.json(project);
+	try {
+		const id = Number(req.params.id);
+		const { name, location, description } = req.body;
+
+		const project = await prisma.project.update({
+			where: { id },
+			data: {
+				name,
+				location,
+				description
+			},
+		});
+
+		res.json(project);
+	} catch (err) {
+		console.error("Error updating project:", err);
+		res.status(500).json({ error: "Failed to update project" });
+	}
 });
 
 router.delete("/projects/:id", authMiddleware, async (req, res) => {
@@ -89,7 +161,7 @@ router.delete("/projects/:id", authMiddleware, async (req, res) => {
 });
 
 /*
-Project-Employee pivot (assign/unassign)
+Project Relation Endpoints (assign/unassign)
 */
 
 // GET all project-employee relations with project details
@@ -124,9 +196,39 @@ router.delete("/projects/:projectId/unassign/:employeeId", authMiddleware, async
 	res.json({ message: "Unassigned" });
 });
 
+router.post("/projects/:id/expenses", authMiddleware, async (req, res) => {
+	try {
+		const projectId = Number(req.params.id);
+		const { expenseId, expenseName, categoryName, price, quantity } = req.body;
+
+		const finalExpenseId = await addOrCreateExpense(expenseId, expenseName, categoryName);
+
+		// Add to ProjectExpenses
+		const projectExpense = await prisma.projectExpenses.create({
+			data: {
+				projectId,
+				expenseId: finalExpenseId,
+				price: price ? Number(price) : 0,
+				Quantity: quantity ? Number(quantity) : 1,
+			},
+		});
+
+		res.json(projectExpense);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to add expense to project" });
+	}
+});
+
 /*
 Project Expenses
 */
+
+router.get("/expenses", authMiddleware, async (req, res) => {
+	const list = await prisma.expenses.findMany({ orderBy: { createdAt: "desc" } });
+	res.json(list);
+});
+
 router.get("/projects/:projectId/expenses", authMiddleware, async (req, res) => {
 	const projectId = Number(req.params.projectId);
 	const list = await prisma.projectExpense.findMany({ where: { projectId } });
