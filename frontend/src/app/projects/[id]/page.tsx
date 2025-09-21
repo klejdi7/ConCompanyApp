@@ -4,8 +4,11 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import api from "../../../services/api";
 import { useAuth } from "../../../context/AuthContext";
-import Loading from "../../../components/Loading"; // reusable loading animation
+import Loading from "../../../components/Loading" // reusable loading animation
 import ProjectExpensesModal from "@/components/ProjectExpensesModal";
+import EmployeeSelectModal from "@/components/EmployeeSelectModal";
+import { FaUserPlus } from "react-icons/fa";
+import EmployeesDataComp from "@/components/EmployeesDataComp";
 
 export default function ProjectDetailPage() {
 	const { token } = useAuth();
@@ -16,8 +19,8 @@ export default function ProjectDetailPage() {
 	const [loading, setLoading] = useState(true);
 	const [allExpenses, setAllExpenses] = useState<any[]>([]);
 	const [showExpensesModal, setShowExpensesModal] = useState(false);
+	const [showEmployeeModal, setShowEmployeeModal] = useState(false);
 
-	// Fetch project (with relations)
 	const fetchProject = async () => {
 		if (!token) return;
 		try {
@@ -30,7 +33,6 @@ export default function ProjectDetailPage() {
 		}
 	};
 
-	// Fetch all available expenses for dropdown
 	const fetchAllExpenses = async () => {
 		if (!token) return;
 		try {
@@ -42,16 +44,25 @@ export default function ProjectDetailPage() {
 	};
 
 	// Add expense to project
-	const handleAddExpense = async (expenseId: number, quantity: number, price: number) => {
+	const handleAddExpense = async (expenseId: number, name: string, category: string,quantity: number, price: number) => {
 		try {
 			await api.post(
 				`/api/projects/${id}/expenses`,
-				{ expenseId, quantity, price },
-				{ headers: { Authorization: `Bearer ${token}` } }
+				{ expenseId, expenseName: name, categoryName: category, quantity, price },
 			);
 			await fetchProject();
+			fetchAllExpenses();
 		} catch (err) {
 			console.error("Failed to add expense:", err);
+		}
+	};
+
+	const handleAssignEmployees = async (employeeIds: number[]) => {
+		try {
+			await api.post(`/api/projects/${id}/assign`, { employeeIds });
+			await fetchProject();
+		} catch (err) {
+			console.error("Failed to assign employees:", err);
 		}
 	};
 
@@ -62,6 +73,8 @@ export default function ProjectDetailPage() {
 
 	if (loading) return <Loading />;
 	if (!project) return <p>Project not found.</p>;
+
+	const existingEmployeeIds = project.employees.map((pe: any) => pe.id);
 
 	return (
 		<div className="container mt-4">
@@ -75,29 +88,46 @@ export default function ProjectDetailPage() {
 
 			<hr />
 
-			<h4>Employees</h4>
+			<div className="d-flex justify-content-between align-items-center mb-3">
+				<h4>Employees</h4>
+				<button
+					className="btn btn-success btn-sm"
+					onClick={() => setShowEmployeeModal(true)}
+				>
+				<i className="me-1"><FaUserPlus /></i> Assign Employees
+				</button>
+			</div>
+
 			{project.employees.length === 0 ? (
 				<p>No employees assigned.</p>
 			) : (
-				<table className="table table-striped">
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Rate</th>
-							<th>Work Days</th>
-						</tr>
-					</thead>
-					<tbody>
-						{project.employees.map((pe: any) => (
-							<tr key={pe.id}>
-								<td>{pe.employee.firstName} {pe.employee.lastName}</td>
-								<td>{pe.employee.rate}</td>
-								<td>{pe.employee.workDays}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
+				<EmployeesDataComp 
+					mode="table" 
+					employees={project.employees} 
+					limit={3} 
+					displayActions={false} 
+					projectMode={true}
+					callback={fetchProject}
+				/>
 			)}
+
+			{/* Employee Selection Modal */}
+			<EmployeeSelectModal
+				isOpen={showEmployeeModal}
+				onClose={() => setShowEmployeeModal(false)}
+				projectId={Number(id)}
+				onAssign={handleAssignEmployees}
+				existingEmployees={existingEmployeeIds}
+			/>
+
+			<EmployeesDataComp
+				mode="modal"
+				employees={project.employees}
+				limit={undefined}
+				displayActions={false}
+				projectMode={true}
+				callback={fetchProject}
+			/>
 
 			<hr />
 
@@ -150,7 +180,6 @@ export default function ProjectDetailPage() {
 							))}
 						</tbody>
 					</table>
-
 				</>
 			)}
 

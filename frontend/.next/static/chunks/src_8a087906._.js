@@ -53,9 +53,11 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/services/api.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 function EmployeeModal(param) {
     let { employee, mode = "add", onSubmit, buttonText, className = "btn btn-primary mb-3" } = param;
@@ -65,23 +67,54 @@ function EmployeeModal(param) {
         id: 0,
         firstName: "",
         lastName: "",
-        rate: 0,
-        workDays: 0
+        roleId: 0,
+        roleName: ""
     });
     const [fadeIn, setFadeIn] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [roles, setRoles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [showNewRoleInput, setShowNewRoleInput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [loadingRoles, setLoadingRoles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Fetch roles when modal opens
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "EmployeeModal.useEffect": ()=>{
+            if (showModal) {
+                fetchAllRoles();
+            }
+        }
+    }["EmployeeModal.useEffect"], [
+        showModal
+    ]);
+    const fetchAllRoles = async ()=>{
+        setLoadingRoles(true);
+        try {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('/api/roles');
+            setRoles(response.data);
+        } catch (err) {
+            console.error("Failed to fetch roles:", err);
+            alert("Failed to load roles. Please try again later.");
+        } finally{
+            setLoadingRoles(false);
+        }
+    };
     // Reset state when opening
     const openModal = ()=>{
         if (mode === "edit" && employee) {
-            setModalEmployee(employee);
+            var _employee_role;
+            setModalEmployee({
+                ...employee,
+                roleId: ((_employee_role = employee.role) === null || _employee_role === void 0 ? void 0 : _employee_role.id) || 0,
+                roleName: ""
+            });
         } else {
             setModalEmployee({
                 id: 0,
                 firstName: "",
                 lastName: "",
-                rate: 0,
-                workDays: 0
+                roleId: 0,
+                roleName: ""
             });
         }
+        setShowNewRoleInput(false);
         setShowModal(true);
     };
     const closeModal = ()=>{
@@ -100,15 +133,50 @@ function EmployeeModal(param) {
     }["EmployeeModal.useEffect"], [
         showModal
     ]);
-    const handleSubmit = (e)=>{
-        if (e) e.preventDefault();
-        if (mode === "delete") {
-            onSubmit(employee); // for delete we just pass the employee
-        } else {
-            onSubmit(modalEmployee);
+    const handleRoleChange = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EmployeeModal.useCallback[handleRoleChange]": (e)=>{
+            const value = e.target.value;
+            if (value === "new") {
+                setShowNewRoleInput(true);
+                setModalEmployee({
+                    ...modalEmployee,
+                    roleId: 0,
+                    roleName: ""
+                });
+            } else {
+                setShowNewRoleInput(false);
+                setModalEmployee({
+                    ...modalEmployee,
+                    roleId: parseInt(value),
+                    roleName: ""
+                });
+            }
         }
-        closeModal();
-    };
+    }["EmployeeModal.useCallback[handleRoleChange]"], [
+        modalEmployee
+    ]);
+    const handleSubmit = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "EmployeeModal.useCallback[handleSubmit]": (e)=>{
+            if (e) e.preventDefault();
+            if (mode === "delete") {
+                onSubmit(employee);
+            } else {
+                var _modalEmployee_roleName;
+                if (showNewRoleInput && !((_modalEmployee_roleName = modalEmployee.roleName) === null || _modalEmployee_roleName === void 0 ? void 0 : _modalEmployee_roleName.trim())) {
+                    alert("Role name cannot be empty.");
+                    return;
+                }
+                onSubmit(modalEmployee);
+            }
+            closeModal();
+        }
+    }["EmployeeModal.useCallback[handleSubmit]"], [
+        employee,
+        mode,
+        modalEmployee,
+        onSubmit,
+        showNewRoleInput
+    ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -117,7 +185,7 @@ function EmployeeModal(param) {
                 children: buttonText || (mode === "edit" ? "Edit Employee" : mode === "delete" ? "Delete Employee" : "Add Employee")
             }, void 0, false, {
                 fileName: "[project]/src/components/EmployeeModal.tsx",
-                lineNumber: 69,
+                lineNumber: 119,
                 columnNumber: 4
             }, this),
             showModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -129,7 +197,7 @@ function EmployeeModal(param) {
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/components/EmployeeModal.tsx",
-                        lineNumber: 77,
+                        lineNumber: 127,
                         columnNumber: 6
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -138,6 +206,9 @@ function EmployeeModal(param) {
                         style: {
                             transition: "opacity 0.3s"
                         },
+                        role: "dialog",
+                        "aria-labelledby": "modal-title",
+                        "aria-hidden": !showModal,
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "modal-dialog",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -149,10 +220,11 @@ function EmployeeModal(param) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                                                     className: "modal-title",
+                                                    id: "modal-title",
                                                     children: "Confirm Delete"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 92,
+                                                    lineNumber: 145,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -161,13 +233,13 @@ function EmployeeModal(param) {
                                                     onClick: closeModal
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 93,
+                                                    lineNumber: 146,
                                                     columnNumber: 12
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 91,
+                                            lineNumber: 144,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -177,7 +249,7 @@ function EmployeeModal(param) {
                                                     children: "Are you sure you want to delete this employee?"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 96,
+                                                    lineNumber: 149,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -189,18 +261,18 @@ function EmployeeModal(param) {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                        lineNumber: 98,
+                                                        lineNumber: 151,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 97,
+                                                    lineNumber: 150,
                                                     columnNumber: 12
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 95,
+                                            lineNumber: 148,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -213,7 +285,7 @@ function EmployeeModal(param) {
                                                     children: "No"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 102,
+                                                    lineNumber: 155,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -223,13 +295,13 @@ function EmployeeModal(param) {
                                                     children: "Yes"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 105,
+                                                    lineNumber: 158,
                                                     columnNumber: 12
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 154,
                                             columnNumber: 11
                                         }, this)
                                     ]
@@ -241,10 +313,11 @@ function EmployeeModal(param) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                                                     className: "modal-title",
+                                                    id: "modal-title",
                                                     children: mode === "edit" ? "Edit Employee" : "Add Employee"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 113,
+                                                    lineNumber: 166,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -253,13 +326,13 @@ function EmployeeModal(param) {
                                                     onClick: closeModal
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 116,
+                                                    lineNumber: 169,
                                                     columnNumber: 12
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 112,
+                                            lineNumber: 165,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -276,7 +349,7 @@ function EmployeeModal(param) {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 119,
+                                                    lineNumber: 172,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -290,43 +363,99 @@ function EmployeeModal(param) {
                                                     required: true
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 128,
+                                                    lineNumber: 181,
                                                     columnNumber: 12
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                    className: "form-control mb-2",
-                                                    type: "number",
-                                                    placeholder: "Rate",
-                                                    value: modalEmployee.rate,
-                                                    onChange: (e)=>setModalEmployee({
-                                                            ...modalEmployee,
-                                                            rate: parseFloat(e.target.value)
-                                                        }),
-                                                    required: true
-                                                }, void 0, false, {
+                                                loadingRoles ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "mb-2",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "spinner-border spinner-border-sm",
+                                                            role: "status",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "visually-hidden",
+                                                                children: "Loading roles..."
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                                lineNumber: 194,
+                                                                columnNumber: 15
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                            lineNumber: 193,
+                                                            columnNumber: 14
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "ms-2",
+                                                            children: "Loading roles..."
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                            lineNumber: 196,
+                                                            columnNumber: 14
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 137,
-                                                    columnNumber: 12
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                    className: "form-control",
-                                                    type: "number",
-                                                    placeholder: "Work Days",
-                                                    value: modalEmployee.workDays,
-                                                    onChange: (e)=>setModalEmployee({
-                                                            ...modalEmployee,
-                                                            workDays: parseInt(e.target.value)
-                                                        }),
-                                                    required: true
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 147,
-                                                    columnNumber: 12
-                                                }, this)
+                                                    lineNumber: 192,
+                                                    columnNumber: 13
+                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                            className: "form-control mb-2",
+                                                            value: showNewRoleInput ? "new" : modalEmployee.roleId,
+                                                            onChange: handleRoleChange,
+                                                            required: true,
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                    value: "0",
+                                                                    children: "Select a role"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                                    lineNumber: 206,
+                                                                    columnNumber: 15
+                                                                }, this),
+                                                                roles.map((role)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: role.id,
+                                                                        children: role.name
+                                                                    }, role.id, false, {
+                                                                        fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                                        lineNumber: 208,
+                                                                        columnNumber: 16
+                                                                    }, this)),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                    value: "new",
+                                                                    children: "+ Create new role"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                                    lineNumber: 212,
+                                                                    columnNumber: 15
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                            lineNumber: 200,
+                                                            columnNumber: 14
+                                                        }, this),
+                                                        showNewRoleInput && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                            className: "form-control mb-2",
+                                                            placeholder: "New Role Name",
+                                                            value: modalEmployee.roleName,
+                                                            onChange: (e)=>setModalEmployee({
+                                                                    ...modalEmployee,
+                                                                    roleName: e.target.value
+                                                                }),
+                                                            required: showNewRoleInput
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/components/EmployeeModal.tsx",
+                                                            lineNumber: 216,
+                                                            columnNumber: 15
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 118,
+                                            lineNumber: 171,
                                             columnNumber: 11
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -339,43 +468,44 @@ function EmployeeModal(param) {
                                                     children: "Close"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 159,
+                                                    lineNumber: 230,
                                                     columnNumber: 12
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     type: "submit",
                                                     className: "btn btn-primary",
+                                                    disabled: loadingRoles,
                                                     children: mode === "edit" ? "Save Changes" : "Add Employee"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                                    lineNumber: 162,
+                                                    lineNumber: 233,
                                                     columnNumber: 12
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                                            lineNumber: 158,
+                                            lineNumber: 229,
                                             columnNumber: 11
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/EmployeeModal.tsx",
-                                    lineNumber: 111,
+                                    lineNumber: 164,
                                     columnNumber: 10
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/EmployeeModal.tsx",
-                                lineNumber: 88,
+                                lineNumber: 141,
                                 columnNumber: 8
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/EmployeeModal.tsx",
-                            lineNumber: 87,
+                            lineNumber: 140,
                             columnNumber: 7
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/EmployeeModal.tsx",
-                        lineNumber: 82,
+                        lineNumber: 132,
                         columnNumber: 6
                     }, this)
                 ]
@@ -383,7 +513,7 @@ function EmployeeModal(param) {
         ]
     }, void 0, true);
 }
-_s(EmployeeModal, "P4iHUP0pY2MsYhJUGHptouwhcR8=");
+_s(EmployeeModal, "LIOVmkC0CfwBclOIuwXnWMEogoA=");
 _c = EmployeeModal;
 var _c;
 __turbopack_context__.k.register(_c, "EmployeeModal");
@@ -572,7 +702,7 @@ function EmployeesPage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     scope: "col",
-                                    children: "Rate"
+                                    children: "Role"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/employees/page.tsx",
                                     lineNumber: 69,
@@ -580,26 +710,10 @@ function EmployeesPage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
                                     scope: "col",
-                                    children: "Work Days"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 70,
-                                    columnNumber: 7
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    scope: "col",
-                                    children: "Total"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 71,
-                                    columnNumber: 7
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    scope: "col",
                                     children: "Actions"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 72,
+                                    lineNumber: 70,
                                     columnNumber: 7
                                 }, this)
                             ]
@@ -614,44 +728,29 @@ function EmployeesPage() {
                         columnNumber: 5
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                        children: employees.map((emp)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
+                        children: employees.map((emp)=>{
+                            var _emp_role;
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: emp.firstName
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 78,
+                                        lineNumber: 76,
                                         columnNumber: 8
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: emp.lastName
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 79,
+                                        lineNumber: 77,
                                         columnNumber: 8
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.rate
+                                        children: ((_emp_role = emp.role) === null || _emp_role === void 0 ? void 0 : _emp_role.name) || "No Role Assigned"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 80,
-                                        columnNumber: 8
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.workDays
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 81,
-                                        columnNumber: 8
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: [
-                                            emp.workDays * emp.rate,
-                                            " Eu"
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 82,
+                                        lineNumber: 78,
                                         columnNumber: 8
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -663,19 +762,19 @@ function EmployeesPage() {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEye"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/employees/page.tsx",
-                                                            lineNumber: 86,
+                                                            lineNumber: 82,
                                                             columnNumber: 11
                                                         }, this),
                                                         " View Employee"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/employees/page.tsx",
-                                                    lineNumber: 85,
+                                                    lineNumber: 81,
                                                     columnNumber: 10
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/employees/page.tsx",
-                                                lineNumber: 84,
+                                                lineNumber: 80,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EmployeeModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -686,7 +785,7 @@ function EmployeesPage() {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaEdit"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/employees/page.tsx",
-                                                            lineNumber: 93,
+                                                            lineNumber: 89,
                                                             columnNumber: 24
                                                         }, void 0),
                                                         " Edit "
@@ -695,7 +794,7 @@ function EmployeesPage() {
                                                 className: "btn btn-success btn-sm me-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/employees/page.tsx",
-                                                lineNumber: 89,
+                                                lineNumber: 85,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$EmployeeModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -706,7 +805,7 @@ function EmployeesPage() {
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTrash"], {}, void 0, false, {
                                                             fileName: "[project]/src/app/employees/page.tsx",
-                                                            lineNumber: 100,
+                                                            lineNumber: 96,
                                                             columnNumber: 24
                                                         }, void 0),
                                                         " Delete "
@@ -715,24 +814,25 @@ function EmployeesPage() {
                                                 className: "btn btn-danger btn-sm"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/employees/page.tsx",
-                                                lineNumber: 96,
+                                                lineNumber: 92,
                                                 columnNumber: 9
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 83,
+                                        lineNumber: 79,
                                         columnNumber: 8
                                     }, this)
                                 ]
                             }, emp.id, true, {
                                 fileName: "[project]/src/app/employees/page.tsx",
-                                lineNumber: 77,
+                                lineNumber: 75,
                                 columnNumber: 7
-                            }, this))
+                            }, this);
+                        })
                     }, void 0, false, {
                         fileName: "[project]/src/app/employees/page.tsx",
-                        lineNumber: 75,
+                        lineNumber: 73,
                         columnNumber: 5
                     }, this)
                 ]

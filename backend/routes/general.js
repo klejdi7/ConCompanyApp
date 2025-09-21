@@ -1,82 +1,110 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "../middleware/auth.js";
+import * as f from "./functions.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
-export async function addOrCreateExpense(expenseId, expenseName, categoryName) {
 
-	// If expenseId is provided, just use it
-	if (expenseId) return expenseId;
-
-	if (!expenseName || !categoryName) {
-		throw new Error("New expense requires name and category");
-	}
-
-	// 1️⃣ Check if category exists, else create
-	let category = await prisma.expenseCategories.findFirst({
-		where: { name: categoryName },
-	});
-	if (!category) {
-		category = await prisma.expenseCategories.create({
-			data: { name: categoryName },
+/*
+Roles CRUD
+*/
+router.get("/roles", authMiddleware, async (req, res) => {
+	try {
+		const list = await prisma.role.findMany({ 
+			orderBy: { name: "asc" } 
 		});
+		res.json(list);
+	} catch (err) {
+		console.error("Error fetching roles:", err);
+		res.status(500).json({ error: "Failed to fetch roles" });
 	}
+});
 
-	// 2️⃣ Check if an expense with this name already exists under this category
-	let expense = await prisma.expenses.findFirst({
-		where: {
-			name: expenseName,
-			expenseCatId: category.id,
-		},
-	});
-
-	// 3️⃣ If not found, create it
-	if (!expense) {
-		expense = await prisma.expenses.create({
-			data: {
-				name: expenseName,
-				expenseCatId: category.id,
-			},
+router.post("/roles", authMiddleware, async (req, res) => {
+	try {
+		const { name } = req.body;
+		const role = await prisma.role.create({
+			data: { name },
 		});
+		res.json(role);
+	} catch (err) {
+		console.error("Error creating role:", err);
+		res.status(500).json({ error: "Failed to create role" });
 	}
-
-	return expense.id;
-}
-
+});
 
 /*
 Employees CRUD
 */
+
 router.get("/employees", authMiddleware, async (req, res) => {
-	const list = await prisma.employee.findMany({ orderBy: { createdAt: "desc" } });
-	res.json(list);
+const list = await prisma.employee.findMany({ 
+	include: {
+	role: true // Include role information
+	},
+	orderBy: { createdAt: "desc" } 
+});
+res.json(list);
 });
 
 router.get("/employees/:id", authMiddleware, async (req, res) => {
-	const id = Number(req.params.id);
-	const e = await prisma.employee.findUnique({ where: { id } });
-	res.json(e);
+const id = Number(req.params.id);
+const e = await prisma.employee.findUnique({ 
+	where: { id },
+	include: {
+	role: true // Include role information
+	}
+});
+res.json(e);
 });
 
 router.post("/employees", authMiddleware, async (req, res) => {
-	const { firstName, lastName, rate, workDays } = req.body;
+try {
+	const { firstName, lastName, roleId, roleName } = req.body;
+	
+	// Get or create role
+	const finalRoleId = await f.addOrCreateRole(roleId, roleName);
+	
+	console.log(roleName);
 	const emp = await prisma.employee.create({
-		data: { firstName, lastName, rate: Number(rate || 0), workDays: Number(workDays || 0) },
+	data: { 
+		firstName, 
+		lastName, 
+		roleId: finalRoleId 
+	},
 	});
 	res.json(emp);
+} catch (err) {
+	console.error("Error creating employee:", err);
+	res.status(500).json({ error: "Failed to create employee" });
+}
 });
 
 router.put("/employees/:id", authMiddleware, async (req, res) => {
+try {
 	const id = Number(req.params.id);
-	const { firstName, lastName, rate, workDays } = req.body;
+	const { firstName, lastName, roleId, roleName } = req.body;
+	
+	// Get or create role
+	const finalRoleId = await f.addOrCreateRole(roleId, roleName);
+	
 	const emp = await prisma.employee.update({
-		where: { id },
-		data: { firstName, lastName, rate: Number(rate || 0), workDays: Number(workDays || 0) },
+	where: { id },
+	data: { 
+		firstName, 
+		lastName, 
+		roleId: finalRoleId 
+	},
 	});
 	res.json(emp);
+} catch (err) {
+	console.error("Error updating employee:", err);
+	res.status(500).json({ error: "Failed to update employee" });
+}
 });
+
 
 router.delete("/employees/:id", authMiddleware, async (req, res) => {
 	const id = Number(req.params.id);
@@ -109,7 +137,11 @@ router.get("/projects/:id", authMiddleware, async (req, res) => {
 			where: { id },
 			include: {
 				employees: {
-					include: { employee: true },
+					include: {
+						employee: {
+							include: { role: true },
+						},
+					},
 				},
 				invoices: true,
 				ProjectExpenses: {
@@ -121,9 +153,26 @@ router.get("/projects/:id", authMiddleware, async (req, res) => {
 
 		if (!project) {
 			return res.status(404).json({ message: "Project not found" });
-		}
+		} 
 
-		res.json(project);
+		// Format employees to match the requested structure
+		const formattedEmployees = project.employees.map((pe) => ({
+			id: pe.employee.id,
+			firstName: pe.employee.firstName,
+			lastName: pe.employee.lastName,
+			roleId: pe.employee.roleId,
+			createdAt: pe.employee.createdAt,
+			updatedAt: pe.employee.updatedAt,
+			role: pe.employee.role,
+			projectEmployeeId: pe.id,
+			workDays: pe.workDays,
+			rate: pe.rate
+		}));
+
+		res.json({
+			...project,
+			employees: formattedEmployees,
+		});
 	} catch (err) {
 		console.error(err);
 		res.status(500).json({ message: "Failed to fetch project details" });
@@ -181,12 +230,95 @@ router.get("/employees/:id/projects", async (req, res) => {
 });
 
 router.post("/projects/:projectId/assign", authMiddleware, async (req, res) => {
+	try {
+		const projectId = Number(req.params.projectId);
+		const { employeeIds } = req.body; // Array of employee IDs
+
+		// Validate input
+		if (!Array.isArray(employeeIds)) {
+			return res.status(400).json({ error: "employeeIds must be an array" });
+		}
+
+		// Check if project exists
+		const project = await prisma.project.findUnique({
+			where: { id: projectId }
+		});
+
+		if (!project) {
+			return res.status(404).json({ error: "Project not found" });
+		}
+
+		// Remove employees not in the provided list
+		await prisma.projectEmployee.deleteMany({
+			where: {
+				projectId,
+				employeeId: {
+					notIn: employeeIds.map(id => Number(id))
+				}
+			}
+		});
+
+		// Add or keep employees in the provided list
+		const assignments = await Promise.all(
+			employeeIds.map(async (employeeId) => {
+				// Check if assignment already exists
+				const existingAssignment = await prisma.projectEmployee.findFirst({
+					where: {
+						projectId,
+						employeeId: Number(employeeId)
+					}
+				});
+
+				if (existingAssignment) {
+					return existingAssignment; // Keep existing assignment
+				}
+
+				// Create new assignment
+				return await prisma.projectEmployee.create({
+					data: {
+						projectId,
+						employeeId: Number(employeeId),
+						rate: 0, // Default values
+						workDays: 0
+					}
+				});
+			})
+		);
+
+		res.json({
+			message: "Employees assigned successfully",
+			assignments: assignments.filter(assignment => assignment !== null)
+		});
+	} catch (err) {
+		console.error("Assignment error:", err);
+		res.status(500).json({ error: "Failed to assign employees" });
+	}
+});
+
+// Add this new endpoint to handle bulk unassignment
+router.post("/projects/:projectId/unassign", authMiddleware, async (req, res) => {
+try {
 	const projectId = Number(req.params.projectId);
-	const { employeeId, role } = req.body;
-	const rec = await prisma.projectEmployee.create({
-		data: { projectId, employeeId: Number(employeeId), role },
+	const { employeeIds } = req.body;
+
+	if (!Array.isArray(employeeIds)) {
+	return res.status(400).json({ error: "employeeIds must be an array" });
+	}
+
+	await prisma.projectEmployee.deleteMany({
+	where: {
+		projectId,
+		employeeId: {
+		in: employeeIds.map(id => Number(id))
+		}
+	}
 	});
-	res.json(rec);
+
+	res.json({ message: "Employees unassigned successfully" });
+} catch (err) {
+	console.error("Unassignment error:", err);
+	res.status(500).json({ error: "Failed to unassign employees" });
+}
 });
 
 router.delete("/projects/:projectId/unassign/:employeeId", authMiddleware, async (req, res) => {
@@ -229,35 +361,35 @@ router.get("/expenses", authMiddleware, async (req, res) => {
 	res.json(list);
 });
 
-router.get("/projects/:projectId/expenses", authMiddleware, async (req, res) => {
-	const projectId = Number(req.params.projectId);
-	const list = await prisma.projectExpense.findMany({ where: { projectId } });
-	res.json(list);
+router.put("/projects/:projectId/expenses/:expenseId", authMiddleware, async (req, res) => {
+	const { projectId, expenseId } = req.params;
+	const { Quantity, price } = req.body;
+
+	try {
+		const updated = await prisma.projectExpenses.update({
+			where: { id: Number(expenseId) },
+			data: { Quantity, price },
+		});
+		res.json(updated);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to update project expense" });
+	}
 });
 
-router.post("/projects/:projectId/expenses", authMiddleware, async (req, res) => {
-	const projectId = Number(req.params.projectId);
-	const { title, amount, note } = req.body;
-	const ex = await prisma.projectExpense.create({
-		data: { projectId, title, amount: Number(amount), note },
-	});
-	res.json(ex);
-});
 
-router.put("/expenses/:id", authMiddleware, async (req, res) => {
-	const id = Number(req.params.id);
-	const { title, amount, note } = req.body;
-	const ex = await prisma.projectExpense.update({
-		where: { id },
-		data: { title, amount: Number(amount), note },
-	});
-	res.json(ex);
-});
+router.delete("/projects/:projectId/expenses/:expenseId", authMiddleware, async (req, res) => {
+	const { expenseId } = req.params;
 
-router.delete("/expenses/:id", authMiddleware, async (req, res) => {
-	const id = Number(req.params.id);
-	await prisma.projectExpense.delete({ where: { id } });
-	res.json({ message: "Expense deleted" });
+	try {
+		await prisma.projectExpenses.delete({
+		where: { id: Number(expenseId) },
+		});
+		res.json({ success: true });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: "Failed to delete project expense" });
+	}
 });
 
 /*
@@ -333,6 +465,24 @@ router.get("/me", authMiddleware, async (req, res) => {
 		res.json(user);
 	} catch (err) {
 		res.status(500).json({ error: "Server error" });
+	}
+});
+
+// Update projectEmployee rate and workDays
+router.put("/project-employees/:id", authMiddleware, async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const { projectId, rate, workDays } = req.body;
+
+		const updatedProjectEmployee = await prisma.projectEmployee.update({
+			where: { id },
+			data: { rate, workDays },
+		});
+
+		res.json(updatedProjectEmployee);
+	} catch (err) {
+		console.error("Error updating project employee:", err);
+		res.status(500).json({ error: "Failed to update project employee" });
 	}
 });
 

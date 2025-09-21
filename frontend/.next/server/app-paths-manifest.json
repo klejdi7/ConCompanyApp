@@ -1,10 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/employees/[id]/page": "app/employees/[id]/page.js",
-  "/employees/page": "app/employees/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/login/page": "app/login/page.js",
-  "/not_authorized/page": "app/not_authorized/page.js",
-  "/projects/[id]/page": "app/projects/[id]/page.js",
-  "/projects/page": "app/projects/page.js"
+  "/projects/[id]/page": "app/projects/[id]/page.js"
 }

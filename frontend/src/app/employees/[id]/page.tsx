@@ -49,7 +49,6 @@ useEffect(() => {
 	if (!authLoading && user) fetchDetails();
 }, [id, authLoading, user]);
 
-// One handler for edit/delete actions from the modal
 const handleAction = async (emp: EmployeeType | undefined, mode: "edit" | "delete") => {
 	if (!emp || !id) return;
 
@@ -113,9 +112,7 @@ return (
 			<div className="card-body">
 				<h5 className="card-title">Employee Details</h5>
 				<p className="mb-1"><strong>Full Name:</strong> {employee.firstName} {employee.lastName}</p>
-				<p className="mb-1"><strong>Rate:</strong> ${employee.rate}</p>
-				<p className="mb-1"><strong>Work days:</strong> {employee.workDays}</p>
-			{/* Add more employee fields here as needed */}
+				<p className="mb-1"><strong>Role:</strong> {employee.role?.name || "No Role Assigned"}</p>
 			</div>
 		</div>
 
@@ -165,3 +162,4 @@ return (
 	</div>
 );
 }
+

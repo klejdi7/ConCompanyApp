@@ -4,398 +4,438 @@ module.exports = [
 
 __turbopack_context__.s([
     "default",
-    ()=>EmployeesPage
+    ()=>EmployeeModal
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/context/AuthContext.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
-;
-;
-function EmployeesPage() {
-    const { token } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useAuth"])();
-    const [employees, setEmployees] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [modalEmployee, setModalEmployee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    const [isEdit, setIsEdit] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const fetchEmployees = async ()=>{
-        if (!token) return;
-        try {
-            const res = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get("http://localhost:4000/employees", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setEmployees(res.data);
-        } catch (err) {
-            console.log("Failed to fetch employees");
-        }
-    };
+function EmployeeModal({ employee, mode = "add", onSubmit, buttonText, className = "btn btn-primary mb-3" }) {
+    const [showModal, setShowModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [modalEmployee, setModalEmployee] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(employee || {
+        id: 0,
+        firstName: "",
+        lastName: "",
+        roleId: 0,
+        roleName: ""
+    });
+    const [fadeIn, setFadeIn] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [roles, setRoles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [showNewRoleInput, setShowNewRoleInput] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [loadingRoles, setLoadingRoles] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Fetch roles when modal opens
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        fetchEmployees();
+        if (showModal) {
+            fetchAllRoles();
+        }
     }, [
-        token
+        showModal
     ]);
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        if (!modalEmployee) return;
+    const fetchAllRoles = async ()=>{
+        setLoadingRoles(true);
         try {
-            if (isEdit) {
-                await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`http://localhost:4000/employees/${modalEmployee.id}`, modalEmployee, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-            } else {
-                await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post("http://localhost:4000/employees", modalEmployee, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+            const response = await fetch('/api/roles');
+            if (!response.ok) {
+                throw new Error('Failed to fetch roles');
             }
-            setModalEmployee(null);
-            fetchEmployees();
-            const modalEl = document.getElementById("employeeModal");
-            if (modalEl) window.bootstrap.Modal.getInstance(modalEl)?.hide();
+            const data = await response.json();
+            setRoles(data);
         } catch (err) {
-            alert("Failed to save employee");
+            console.error("Failed to fetch roles:", err);
+        } finally{
+            setLoadingRoles(false);
         }
     };
-    const handleDelete = async (id)=>{
-        if (!confirm("Are you sure?")) return;
-        try {
-            await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`http://localhost:4000/employees/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+    // Reset state when opening
+    const openModal = ()=>{
+        if (mode === "edit" && employee) {
+            setModalEmployee({
+                ...employee,
+                roleId: employee.role?.id || 0,
+                roleName: ""
             });
-            fetchEmployees();
-        } catch (err) {
-            alert("Failed to delete employee");
+        } else {
+            setModalEmployee({
+                id: 0,
+                firstName: "",
+                lastName: "",
+                roleId: 0,
+                roleName: ""
+            });
+        }
+        setShowNewRoleInput(false);
+        setShowModal(true);
+    };
+    const closeModal = ()=>{
+        setFadeIn(false);
+        setTimeout(()=>setShowModal(false), 300);
+    };
+    // fade-in animation
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (showModal) {
+            setTimeout(()=>setFadeIn(true), 200);
+        }
+    }, [
+        showModal
+    ]);
+    const handleRoleChange = (e)=>{
+        const value = e.target.value;
+        if (value === "new") {
+            setShowNewRoleInput(true);
+            setModalEmployee({
+                ...modalEmployee,
+                roleId: 0,
+                roleName: ""
+            });
+        } else {
+            setShowNewRoleInput(false);
+            setModalEmployee({
+                ...modalEmployee,
+                roleId: parseInt(value),
+                roleName: ""
+            });
         }
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "container py-5",
+    const handleSubmit = (e)=>{
+        if (e) e.preventDefault();
+        if (mode === "delete") {
+            onSubmit(employee);
+        } else {
+            onSubmit(modalEmployee);
+        }
+        closeModal();
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                children: "Employees"
-            }, void 0, false, {
-                fileName: "[project]/src/app/employees/page.tsx",
-                lineNumber: 78,
-                columnNumber: 3
-            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                className: "btn btn-success mb-3",
-                "data-bs-toggle": "modal",
-                "data-bs-target": "#employeeModal",
-                onClick: ()=>{
-                    setModalEmployee({
-                        id: 0,
-                        name: "",
-                        lastName: "",
-                        rate: 0,
-                        workDays: 0
-                    });
-                    setIsEdit(false);
-                },
-                children: " Add Employee "
+                className: className,
+                onClick: openModal,
+                children: buttonText || (mode === "edit" ? "Edit Employee" : mode === "delete" ? "Delete Employee" : "Add Employee")
             }, void 0, false, {
                 fileName: "[project]/src/app/employees/page.tsx",
-                lineNumber: 79,
-                columnNumber: 3
+                lineNumber: 117,
+                columnNumber: 13
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
-                className: "table table-striped",
+            showModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("thead", {
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Name"
-                                }, void 0, false, {
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: `modal-backdrop fade ${fadeIn ? "show" : ""}`,
+                        style: {
+                            transition: "opacity 0.3s"
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/src/app/employees/page.tsx",
+                        lineNumber: 125,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: `modal fade ${fadeIn ? "show d-block" : "d-none"}`,
+                        tabIndex: -1,
+                        style: {
+                            transition: "opacity 0.3s"
+                        },
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "modal-dialog",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "modal-content",
+                                children: mode === "delete" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-header",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                                    className: "modal-title",
+                                                    children: "Confirm Delete"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 140,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: "btn-close",
+                                                    onClick: closeModal
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 141,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 139,
+                                            columnNumber: 41
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-body",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: "Are you sure you want to delete this employee?"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 144,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                                        children: [
+                                                            employee?.firstName,
+                                                            " ",
+                                                            employee?.lastName
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/app/employees/page.tsx",
+                                                        lineNumber: 146,
+                                                        columnNumber: 49
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 145,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 143,
+                                            columnNumber: 41
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-footer",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: "btn btn-secondary",
+                                                    onClick: closeModal,
+                                                    children: "No"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 150,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: "btn btn-danger",
+                                                    onClick: ()=>handleSubmit(),
+                                                    children: "Yes"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 153,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 149,
+                                            columnNumber: 41
+                                        }, this)
+                                    ]
+                                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                                    onSubmit: handleSubmit,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-header",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                                    className: "modal-title",
+                                                    children: mode === "edit" ? "Edit Employee" : "Add Employee"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 161,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: "btn-close",
+                                                    onClick: closeModal
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 164,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 160,
+                                            columnNumber: 41
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-body",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    className: "form-control mb-2",
+                                                    placeholder: "First Name",
+                                                    value: modalEmployee.firstName,
+                                                    onChange: (e)=>setModalEmployee({
+                                                            ...modalEmployee,
+                                                            firstName: e.target.value
+                                                        }),
+                                                    required: true
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 167,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    className: "form-control mb-2",
+                                                    placeholder: "Last Name",
+                                                    value: modalEmployee.lastName,
+                                                    onChange: (e)=>setModalEmployee({
+                                                            ...modalEmployee,
+                                                            lastName: e.target.value
+                                                        }),
+                                                    required: true
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 176,
+                                                    columnNumber: 45
+                                                }, this),
+                                                loadingRoles ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "mb-2",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "spinner-border spinner-border-sm",
+                                                            role: "status",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "visually-hidden",
+                                                                children: "Loading roles..."
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/app/employees/page.tsx",
+                                                                lineNumber: 189,
+                                                                columnNumber: 57
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/employees/page.tsx",
+                                                            lineNumber: 188,
+                                                            columnNumber: 53
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "ms-2",
+                                                            children: "Loading roles..."
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/employees/page.tsx",
+                                                            lineNumber: 191,
+                                                            columnNumber: 53
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 187,
+                                                    columnNumber: 49
+                                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                            className: "form-control mb-2",
+                                                            value: showNewRoleInput ? "new" : modalEmployee.roleId,
+                                                            onChange: handleRoleChange,
+                                                            required: true,
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                    value: "0",
+                                                                    children: "Select a role"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                                    lineNumber: 201,
+                                                                    columnNumber: 57
+                                                                }, this),
+                                                                roles.map((role)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                        value: role.id,
+                                                                        children: role.name
+                                                                    }, role.id, false, {
+                                                                        fileName: "[project]/src/app/employees/page.tsx",
+                                                                        lineNumber: 203,
+                                                                        columnNumber: 61
+                                                                    }, this)),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                    value: "new",
+                                                                    children: "+ Create new role"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                                    lineNumber: 207,
+                                                                    columnNumber: 57
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/app/employees/page.tsx",
+                                                            lineNumber: 195,
+                                                            columnNumber: 53
+                                                        }, this),
+                                                        showNewRoleInput && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                            className: "form-control mb-2",
+                                                            placeholder: "New Role Name",
+                                                            value: modalEmployee.roleName,
+                                                            onChange: (e)=>setModalEmployee({
+                                                                    ...modalEmployee,
+                                                                    roleName: e.target.value
+                                                                }),
+                                                            required: showNewRoleInput
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/employees/page.tsx",
+                                                            lineNumber: 211,
+                                                            columnNumber: 57
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 166,
+                                            columnNumber: 41
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "modal-footer",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "button",
+                                                    className: "btn btn-secondary",
+                                                    onClick: closeModal,
+                                                    children: "Close"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 225,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                    type: "submit",
+                                                    className: "btn btn-primary",
+                                                    disabled: loadingRoles,
+                                                    children: mode === "edit" ? "Save Changes" : "Add Employee"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/employees/page.tsx",
+                                                    lineNumber: 228,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/employees/page.tsx",
+                                            lineNumber: 224,
+                                            columnNumber: 41
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 83,
-                                    columnNumber: 6
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Last Name"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 84,
-                                    columnNumber: 6
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Rate"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 85,
-                                    columnNumber: 6
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Work Days"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 86,
-                                    columnNumber: 6
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Actions"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/employees/page.tsx",
-                                    lineNumber: 87,
-                                    columnNumber: 6
+                                    lineNumber: 159,
+                                    columnNumber: 37
                                 }, this)
-                            ]
-                        }, void 0, true, {
+                            }, void 0, false, {
+                                fileName: "[project]/src/app/employees/page.tsx",
+                                lineNumber: 136,
+                                columnNumber: 29
+                            }, this)
+                        }, void 0, false, {
                             fileName: "[project]/src/app/employees/page.tsx",
-                            lineNumber: 82,
-                            columnNumber: 5
+                            lineNumber: 135,
+                            columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/employees/page.tsx",
-                        lineNumber: 81,
-                        columnNumber: 4
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
-                        children: employees.map((emp)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.name
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 93,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.lastName
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 94,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.rate
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 95,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: emp.workDays
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 96,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                className: "btn btn-primary me-2",
-                                                "data-bs-toggle": "modal",
-                                                "data-bs-target": "#employeeModal",
-                                                onClick: ()=>{
-                                                    setModalEmployee(emp);
-                                                    setIsEdit(true);
-                                                },
-                                                children: "Edit"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/employees/page.tsx",
-                                                lineNumber: 98,
-                                                columnNumber: 8
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                className: "btn btn-danger",
-                                                onClick: ()=>handleDelete(emp.id),
-                                                children: "Delete"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/app/employees/page.tsx",
-                                                lineNumber: 109,
-                                                columnNumber: 8
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 97,
-                                        columnNumber: 7
-                                    }, this)
-                                ]
-                            }, emp.id, true, {
-                                fileName: "[project]/src/app/employees/page.tsx",
-                                lineNumber: 92,
-                                columnNumber: 6
-                            }, this))
-                    }, void 0, false, {
-                        fileName: "[project]/src/app/employees/page.tsx",
-                        lineNumber: 90,
-                        columnNumber: 4
+                        lineNumber: 130,
+                        columnNumber: 21
                     }, this)
                 ]
-            }, void 0, true, {
-                fileName: "[project]/src/app/employees/page.tsx",
-                lineNumber: 80,
-                columnNumber: 3
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "modal fade",
-                id: "employeeModal",
-                tabIndex: -1,
-                "aria-hidden": "true",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "modal-dialog",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
-                        className: "modal-content",
-                        onSubmit: handleSubmit,
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "modal-header",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
-                                        className: "modal-title",
-                                        children: [
-                                            isEdit ? "Edit" : "Add",
-                                            " Employee"
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 123,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        className: "btn-close",
-                                        "data-bs-dismiss": "modal"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 124,
-                                        columnNumber: 7
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/app/employees/page.tsx",
-                                lineNumber: 122,
-                                columnNumber: 6
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "modal-body",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        className: "form-control mb-2",
-                                        placeholder: "Name",
-                                        value: modalEmployee?.name || "",
-                                        onChange: (e)=>setModalEmployee((prev)=>({
-                                                    ...prev,
-                                                    name: e.target.value
-                                                })),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 127,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        className: "form-control mb-2",
-                                        placeholder: "Last Name",
-                                        value: modalEmployee?.lastName || "",
-                                        onChange: (e)=>setModalEmployee((prev)=>({
-                                                    ...prev,
-                                                    lastName: e.target.value
-                                                })),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 135,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "number",
-                                        className: "form-control mb-2",
-                                        placeholder: "Rate",
-                                        value: modalEmployee?.rate || 0,
-                                        onChange: (e)=>setModalEmployee((prev)=>({
-                                                    ...prev,
-                                                    rate: Number(e.target.value)
-                                                })),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 143,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "number",
-                                        className: "form-control mb-2",
-                                        placeholder: "Work Days",
-                                        value: modalEmployee?.workDays || 0,
-                                        onChange: (e)=>setModalEmployee((prev)=>({
-                                                    ...prev,
-                                                    workDays: Number(e.target.value)
-                                                })),
-                                        required: true
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 151,
-                                        columnNumber: 7
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/app/employees/page.tsx",
-                                lineNumber: 126,
-                                columnNumber: 6
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "modal-footer",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        type: "button",
-                                        className: "btn btn-secondary",
-                                        "data-bs-dismiss": "modal",
-                                        children: "Close"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 161,
-                                        columnNumber: 7
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                        type: "submit",
-                                        className: "btn btn-primary",
-                                        children: isEdit ? "Save Changes" : "Add Employee"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/employees/page.tsx",
-                                        lineNumber: 164,
-                                        columnNumber: 7
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/app/employees/page.tsx",
-                                lineNumber: 160,
-                                columnNumber: 6
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/src/app/employees/page.tsx",
-                        lineNumber: 121,
-                        columnNumber: 5
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/src/app/employees/page.tsx",
-                    lineNumber: 120,
-                    columnNumber: 4
-                }, this)
-            }, void 0, false, {
-                fileName: "[project]/src/app/employees/page.tsx",
-                lineNumber: 119,
-                columnNumber: 3
-            }, this)
+            }, void 0, true)
         ]
-    }, void 0, true, {
-        fileName: "[project]/src/app/employees/page.tsx",
-        lineNumber: 77,
-        columnNumber: 2
-    }, this);
+    }, void 0, true);
 }
 }),
 ];

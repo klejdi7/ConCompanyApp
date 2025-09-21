@@ -7,21 +7,21 @@ export interface ProjectExpensesModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	projectId: number;
-	onAddExpense: (expenseId: number, quantity: number, price: number) => Promise<void>;
+	onAddExpense: (expenseId: number, name: string, category: string,quantity: number, price: number) => Promise<void>;
 	expenses: any[];
 	allExpenses: any[];
 	fetchExpenses: () => Promise<void>;
 }
 
 export default function ProjectExpensesModal({
-	isOpen,
-	onClose,
-	projectId,
-	onAddExpense,
-	expenses,
-	allExpenses,
-	fetchExpenses,
-	}: ProjectExpensesModalProps) {
+isOpen,
+onClose,
+projectId,
+onAddExpense,
+expenses,
+allExpenses,
+fetchExpenses,
+}: ProjectExpensesModalProps) {
 
 	const [selectedExpense, setSelectedExpense] = useState<number | "new">();
 	const [newExpenseName, setNewExpenseName] = useState("");
@@ -29,33 +29,21 @@ export default function ProjectExpensesModal({
 	const [quantity, setQuantity] = useState<number>(1);
 	const [price, setPrice] = useState<number>(0);
 
+	const [editRow, setEditRow] = useState<number | null>(null);
+	const [editQuantity, setEditQuantity] = useState<number>(0);
+	const [editPrice, setEditPrice] = useState<number>(0);
+
+	const [deleteRow, setDeleteRow] = useState<number | null>(null);
+
 	if (!isOpen) return null;
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
 		try {
-			let expenseId: number;
+			let expenseId = Number(selectedExpense) || 0;
 
-			if (selectedExpense === "new") {
-				// 1. create category if needed
-				const categoryRes = await api.post("/api/expense-categories", { name: newCategory });
-				const categoryId = categoryRes.data.id;
-
-				// 2. create expense
-				const expenseRes = await api.post("/api/expenses", {
-					name: newExpenseName,
-					expenseCatId: categoryId,
-				});
-				expenseId = expenseRes.data.id;
-			} else {
-				expenseId = Number(selectedExpense);
-			}
-
-			// 3. link expense to project
-			await onAddExpense(expenseId, quantity, price);
-
-			// 4. refresh project
+			await onAddExpense(expenseId, newExpenseName, newCategory, quantity,  price);
 			await fetchExpenses();
 
 			// reset form
@@ -69,6 +57,36 @@ export default function ProjectExpensesModal({
 		}
 	};
 
+	const handleEdit = (pe: any) => {
+		setEditRow(pe.id);
+		setEditQuantity(pe.Quantity);
+		setEditPrice(pe.price);
+	};
+
+	const handleSave = async (id: number) => {
+		try {
+			await api.put(`/api/projects/${projectId}/expenses/${id}`, {
+				Quantity: editQuantity,
+				price: editPrice,
+			});
+			await fetchExpenses();
+			setEditRow(null);
+		} catch (err) {
+			console.error("Failed to update expense:", err);
+		}
+	};
+
+	const handleDelete = async () => {
+		if (!deleteRow) return;
+		try {
+			await api.delete(`/api/projects/${projectId}/expenses/${deleteRow}`);
+			await fetchExpenses();
+			setDeleteRow(null);
+		} catch (err) {
+			console.error("Failed to delete expense:", err);
+		}
+	};
+	
 	return (
 		<div className="modal d-block" tabIndex={-1} style={{ background: "rgba(0,0,0,0.5)" }}>
 			<div className="modal-dialog modal-xl">
@@ -92,7 +110,7 @@ export default function ProjectExpensesModal({
 									<option value="">Select Expense</option>
 										{allExpenses.map((exp) => (
 											<option key={exp.id} value={exp.id}>
-											{exp.name} ({exp.expenseCategories?.name})
+												{exp.name} ({exp.expenseCategories?.name})
 											</option>
 										))}
 										<option value="new">+ Add new expense</option>
@@ -101,7 +119,7 @@ export default function ProjectExpensesModal({
 
 							{selectedExpense === "new" && (
 								<>
-									<div className="col-md-3">
+									<div className="col-md-4">
 										<input
 										type="text"
 										className="form-control"
@@ -111,7 +129,7 @@ export default function ProjectExpensesModal({
 										required
 										/>
 									</div>
-									<div className="col-md-3">
+									<div className="col-md-4">
 										<input
 										type="text"
 										className="form-control"
@@ -124,28 +142,43 @@ export default function ProjectExpensesModal({
 								</>
 							)}
 
-							<div className="col-md-2">
-								<input
-								type="number"
-								className="form-control"
-								placeholder="Qty"
-								min={1}
-								value={quantity}
-								onChange={(e) => setQuantity(Number(e.target.value))}
-								required
-								/>
+							<div className="col-md-4">
+								<div className="row align-items-center">
+									<div className="col-md-4">
+										<label className="col-form-label">Quantity:</label>
+									</div>
+									<div className="col-md-8">
+										<input
+											type="number"
+											className="form-control"
+											id="quantityInput"
+											placeholder="Qty"
+											min={1}
+											required
+											onChange={(e) => setQuantity(Number(e.target.value))}
+										/>
+									</div>
+								</div>
 							</div>
-							<div className="col-md-2">
-								<input
-								type="number"
-								className="form-control"
-								placeholder="Price"
-								min={0}
-								step="0.01"
-								value={price}
-								onChange={(e) => setPrice(Number(e.target.value))}
-								required
-								/>
+							
+							<div className="col-md-4">
+								<div className="row align-items-center">
+									<div className="col-md-4">
+										<label className="col-form-label">Price:</label>
+									</div>
+									<div className="col-md-8">
+										<input
+											type="number"
+											className="form-control"
+											id="priceInput"
+											placeholder="Price"
+											min={0}
+											step="0.01"
+											required
+											onChange={(e) => setPrice(Number(e.target.value))}
+										/>
+									</div>
+								</div>
 							</div>
 							<div className="col-md-2">
 								<button type="submit" className="btn btn-primary w-100">
@@ -162,6 +195,7 @@ export default function ProjectExpensesModal({
 									<th>Category</th>
 									<th>Quantity</th>
 									<th>Price</th>
+									<th>Total</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -174,15 +208,70 @@ export default function ProjectExpensesModal({
 								) : (
 								expenses.map((pe: any) => (
 									<tr key={pe.id}>
-										<td>{pe.expenses.name}</td>
-										<td>{pe.expenses.expenseCategories?.name}</td>
-										<td>{pe.Quantity}</td>
-										<td>{pe.price}</td>
+									<td>{pe.expenses.name}</td>
+									<td>{pe.expenses.expenseCategories?.name}</td>
+									<td>
+										{editRow === pe.id ? (
+										<input
+											type="number"
+											className="form-control"
+											value={editQuantity}
+											onChange={(e) => setEditQuantity(Number(e.target.value))}
+										/>
+										) : (
+										pe.Quantity
+										)}
+									</td>
+									<td>
+										{editRow === pe.id ? (
+										<input
+											type="number"
+											className="form-control"
+											value={editPrice}
+											onChange={(e) => setEditPrice(Number(e.target.value))}
+										/>
+										) : (
+										pe.price
+										)}
+									</td>
+									<td> {pe.price * pe.Quantity} </td>
+									<td>
+										{editRow === pe.id ? (
+										<button
+											className="btn btn-success btn-sm me-2"
+											onClick={() => handleSave(pe.id)}
+										>
+											Save
+										</button>
+										) : (
+										<button
+											className="btn btn-warning btn-sm me-2"
+											onClick={() => handleEdit(pe)}
+										>
+											Edit
+										</button>
+										)}
+										<button
+										className="btn btn-danger btn-sm"
+										onClick={() => setDeleteRow(pe.id)}
+										>
+										Delete
+										</button>
+									</td>
 									</tr>
 								))
 								)}
 							</tbody>
 						</table>
+						{/* Total Section */}
+						{expenses.length > 0 && (
+						<div className="text-end mt-2">
+							<h5>
+							Total Expenses:{" "}
+							{expenses.reduce((acc, pe) => acc + pe.price * pe.Quantity, 0).toFixed(2)}
+							</h5>
+						</div>
+						)}
 					</div>
 					<div className="modal-footer">
 						<button className="btn btn-secondary" onClick={onClose}>
@@ -191,6 +280,26 @@ export default function ProjectExpensesModal({
 					</div>
 				</div>
 			</div>
+			{/* Delete modal */}
+			{deleteRow && (
+				<div className="modal d-block" tabIndex={-1} style={{ background: "rgba(0,0,0,0.5)" }}>
+					<div className="modal-dialog modal-sm">
+						<div className="modal-content">
+							<div className="modal-body">
+								<p>Are you sure you want to delete this expense?</p>
+								<div className="d-flex justify-content-end">
+									<button className="btn btn-secondary me-2" onClick={() => setDeleteRow(null)}>
+										Cancel
+									</button>
+									<button className="btn btn-danger" onClick={handleDelete}>
+										Delete
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
