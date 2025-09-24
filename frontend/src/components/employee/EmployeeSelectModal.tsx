@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import api from "@/services/api";
+import { useTranslation } from "react-i18next";
 
 export interface Employee {
 	id: number;
@@ -26,6 +27,7 @@ projectId,
 onAssign,
 existingEmployees
 }: EmployeeSelectModalProps) {
+	const { t } = useTranslation();
 	const [allEmployees, setAllEmployees] = useState<Employee[]>([]);
 	const [selectedEmployees, setSelectedEmployees] = useState<number[]>([]);
 	const [loading, setLoading] = useState(true);
@@ -87,7 +89,7 @@ existingEmployees
 					<div className="modal-dialog modal-lg">
 						<div className="modal-content">
 							<div className="modal-header">
-								<h5 className="modal-title">Assign Employees to Project</h5>
+								<h5 className="modal-title">{t("employees.assignEmployees")}</h5>
 								<button type="button" className="btn-close" onClick={onClose} />
 							</div>
 					
@@ -106,7 +108,7 @@ existingEmployees
 									className="btn btn-outline-primary btn-sm"
 									onClick={handleSelectAll}
 									>
-									{selectedEmployees.length === allEmployees.length ? "Deselect All" : "Select All"}
+									{selectedEmployees.length === allEmployees.length ? t("employees.deselectAll") : t("employees.selectAll")}
 									</button>
 								</div>
 
@@ -114,7 +116,7 @@ existingEmployees
 									<input
 									type="text"
 									className="form-control"
-									placeholder="Search employees..."
+									placeholder={t("employees.searchPlaceholder")}
 									value={searchTerm}
 									onChange={e => setSearchTerm(e.target.value)}
 									/>
@@ -124,10 +126,10 @@ existingEmployees
 									<table className="table table-hover">
 									<thead>
 										<tr>
-										<th>Select</th>
-										<th>Name</th>
-										<th>Rate</th>
-										<th>Work Days</th>
+										<th>{t("employees.select")}</th>
+										<th>{t("employees.name")}</th>
+										<th>{t("employees.rate")}</th>
+										<th>{t("employees.workDays")}</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -146,7 +148,7 @@ existingEmployees
 											<td>
 											{employee.firstName} {employee.lastName}
 											{existingEmployees.includes(employee.id) && (
-												<span className="badge bg-info ms-2">Already assigned</span>
+												<span className="badge bg-info ms-2">{t("employees.alreadyAssigned")}</span>
 											)}
 											</td>
 											<td>${employee.rate}</td>
@@ -158,7 +160,7 @@ existingEmployees
 								</div>
 
 								<div className="mt-3 text-muted">
-									Employees Rate and Work days can be adjusted at <strong > View All Employees </strong>
+									{t("employees.rateWorkDaysInfo")} <strong>{t("employees.viewAllEmployees")}</strong>
 								</div>
 								</>
 							)}
@@ -166,9 +168,9 @@ existingEmployees
 
 							<div className="modal-footer">
 								<button type="button" className="btn btn-secondary" onClick={onClose}>
-									Cancel
+									{t("common.cancel")}
 								</button>
-							<button type="button" className="btn btn-primary" onClick={handleSubmit} > Apply Selection </button>
+							<button type="button" className="btn btn-primary" onClick={handleSubmit} > {t("common.applySelection")} </button>
 						</div>
 					</div>
 				</div>

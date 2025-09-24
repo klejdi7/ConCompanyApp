@@ -1,0 +1,544 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+const resources = {
+	en: {
+		translation: {
+		// Navigation
+		"nav.dashboard": "Dashboard",
+		"nav.projects": "Projects",
+		"nav.employees": "Employees",
+		"nav.expenses": "Expenses",
+		"nav.invoices": "Invoices",
+		"nav.settings": "Settings",
+		"nav.logout": "Logout",
+		
+		// Common
+		"common.yes": "Yes",
+		"common.no": "No",
+		"common.save": "Save",
+		"common.cancel": "Cancel",
+		"common.edit": "Edit",
+		"common.delete": "Delete",
+		"common.add": "Add",
+		"common.loading": "Loading...",
+		"common.error": "Error",
+		"common.success": "Success",
+		"common.back": "Back",
+		"common.next": "Next",
+		"common.previous": "Previous",
+		"common.search": "Search",
+		"common.actions": "Actions",
+		"common.deleteQ": "Are you sure you want to delete",
+		"common.update": "Update",
+		"common.download": "Download",
+		// Auth
+		"auth.login": "Login",
+		"auth.register": "Register",
+		"auth.email": "Email",
+		"auth.password": "Password",
+		"auth.name": "Full Name",
+		"auth.confirmPassword": "Confirm Password",
+		"auth.invalidCredentials": "Invalid credentials",
+		
+		// Projects
+		"projects.title": "Projects",
+		"projects.create": "Create Project",
+		"projects.name": "Project Name",
+		"projects.location": "Location",
+		"projects.description": "Description",
+		"projects.employees": "Employees",
+		"projects.expenses": "Expenses",
+		"projects.invoices": "Invoices",
+		"projects.offers": "Offers",
+		"projects.assignEmployees": "Assign Employees",
+		"projects.noProjects": "No projects yet",
+		"projects.generateOffer": "Generate Offer PDF",
+		"projects.viewAll": "View All",
+		"projects.addProject": "Add Project",
+		"projects.deleteProject": "Delete Project",
+		"projects.addButton": "Add",
+		"project.NamePlaceholder": "Project Name",
+		"project.LocationPlaceholder": "Project Location",
+		"project.DescriptionPlaceholder": "Project Description",
+		"projects.amount": "Amount",
+		"projects.generating": "Generating...",
+		"projects.generatingFile": "Generating File...",
+		"projects.created": "Created",
+		"project.offerFor": "Offer for",
+		"projects.noInvoices": "No invoices available",
+		
+		// Employees
+		"employees.title": "Employees",
+		"employees.create": "Add Employee",
+		"employees.firstName": "First Name",
+		"employees.lastName": "Last Name",
+		"employees.rate": "Rate",
+		"employees.workDays": "Work Days",
+		"employees.role": "Role",
+		"employees.newRole": "Create new role",
+		"employees.selectRole": "Select a role",
+		"employees.noEmployees": "No employees assigned",
+		"employees.deleteEmployee": "Are you sure you want to delete this employee?",
+		"employees.newRolePlaceholder": "New Role Name",
+		"employees.details.title": "Employee Details",
+		"employees.details.fullName": "Full Name",
+		"employees.details.role": "Role",
+		"employees.projects.title": "Projects",
+		"employees.projects.rate": "Rate",
+		"employees.projects.workDays": "Work Days",
+		"employees.projects.total": "Total",
+		"employees.invoices.title": "Invoices",
+		"employees.invoices.noInvoices": "No invoices available",
+		"employees.goTo": "Go to Employees",
+		"employees.assignEmployees": "Assign Employees",
+		"employees.searchPlaceholder": "Search employees...",
+		"employees.select": "Select",
+		"employees.name": "Name",
+		"employees.alreadyAssigned": "Already assigned",
+		"employees.viewAllEmployees": "View All Employees",
+		"employees.rateWorkDaysInfo": "Rate and Work Days Information",
+
+		// Expenses
+		"expenses.title": "Expenses",
+		"expenses.create": "Add Expense",
+		"expenses.name": "Expense Name",
+		"expenses.category": "Category",
+		"expenses.price": "Price",
+		"expenses.quantity": "Quantity",
+		"expenses.total": "Total",
+		"expenses.noExpenses": "No expenses yet",
+		"expenses.selectexpense": "Select Expense",
+		"expenses.qty": "Quantity",
+		"expenses.add": "Add Expense",
+		"expenses.edit": "Edit Expense",
+		"expenses.delete": "Delete Expense",
+		"expenses.totalExpenses": "Total Expenses",
+		"expenses.addNewExpense": "Add New Expense",
+
+		// Invoices
+		"invoices.title": "Invoices",
+		"invoices.amount": "Amount",
+		"invoices.createdAt": "Created At",
+		"invoices.noInvoices": "No invoices yet",
+		"invoices.goTo": "Go to Invoices",
+		
+		// Settings
+		"settings.title": "Settings",
+		"settings.user": "User Settings",
+		"settings.preferences": "Preferences",
+		"settings.company": "Company Details",
+		"settings.language": "Language",
+		"settings.timezone": "Timezone",
+		"settings.dateFormat": "Date Format",
+		"settings.notifications": "Notifications",
+		
+		// Forms
+		"forms.required": "This field is required",
+		"forms.invalidEmail": "Invalid email address",
+		"forms.passwordsMatch": "Passwords must match",
+		
+		// Messages
+		"messages.saved": "Saved successfully",
+		"messages.deleted": "Deleted successfully",
+		"messages.error": "An error occurred",
+		
+		// Table
+		"table.name": "Name",
+		"table.lastName": "Last Name",
+		"table.rate": "Rate",
+		"table.workDays": "Work Days",
+		"table.role": "Role",
+		"table.category": "Category",
+		"table.price": "Price",
+		"table.quantity": "Quantity",
+		"table.total": "Total",
+		"table.description": "Description",
+		"table.category": "Category",
+		"table.qty": "Qty",
+		"table.actions": "Actions",
+
+		// Button Text
+		"button.viewEmployee": "View Employee",
+		"button.addEmployee": "Add Employee",
+		"button.viewProject": "View Project",
+		"button.viewAllEmployees": "View All Employees",
+
+		// Projects Table
+		"projects.table.name": "Project Name",
+		"projects.table.location": "Location",
+		"projects.table.description": "Description",
+		"projects.table.actions": "Actions",
+
+		// Welcome Back
+		"welcome.back": "Welcome back!",
+
+		}
+	},
+	el: {
+		translation: {
+		// Navigation
+		"nav.dashboard": "Πίνακας Ελέγχου",
+		"nav.projects": "Έργα",
+		"nav.employees": "Υπάλληλοι",
+		"nav.expenses": "Έξοδα",
+		"nav.invoices": "Τιμολόγια",
+		"nav.settings": "Ρυθμίσεις",
+		"nav.logout": "Αποσύνδεση",
+
+		// Common
+		"common.yes": "Ναι",
+		"common.no": "Όχι",
+		"common.save": "Αποθήκευση",
+		"common.cancel": "Ακύρωση",
+		"common.edit": "Επεξεργασία",
+		"common.delete": "Διαγραφή",
+		"common.add": "Προσθήκη",
+		"common.loading": "Φόρτωση...",
+		"common.error": "Σφάλμα",
+		"common.success": "Επιτυχία",
+		"common.back": "Πίσω",
+		"common.next": "Επόμενο",
+		"common.previous": "Προηγούμενο",
+		"common.search": "Αναζήτηση",
+		"common.actions": "Ενέργειες",
+		"common.deleteQ": "Είστε σίγουροι ότι θέλετε να διαγράψετε to",
+		"common.update": "Ενημέρωση",
+		"common.download": "Λήψη",
+		
+		// Auth
+		"auth.login": "Σύνδεση",
+		"auth.register": "Εγγραφή",
+		"auth.email": "Email",
+		"auth.password": "Κωδικός",
+		"auth.name": "Ονοματεπώνυμο",
+		"auth.confirmPassword": "Επιβεβαίωση Κωδικού",
+		"auth.invalidCredentials": "Μη έγκυρα διαπιστευτήρια",
+
+		// Projects
+		"projects.title": "Έργα",
+		"projects.create": "Δημιουργία Έργου",
+		"projects.name": "Όνομα Έργου",
+		"projects.location": "Τοποθεσία",
+		"projects.description": "Περιγραφή",
+		"projects.employees": "Υπάλληλοι",
+		"projects.expenses": "Έξοδα",
+		"projects.invoices": "Τιμολόγια",
+		"projects.offers": "Προσφορές",
+		"projects.assignEmployees": "Ανάθεση Υπαλλήλων",
+		"projects.noProjects": "Δεν υπάρχουν έργα ακόμη",
+		"projects.generateOffer": "Δημιουργία PDF Προσφοράς",
+		"projects.viewAll": "Προβολή Όλων",
+		"projects.addProject": "Προσθήκη Έργου",
+		"projects.deleteProject": "Διαγραφή Έργου",
+		"projects.addButton": "Προσθήκη",
+		"project.NamePlaceholder": "Όνομα Έργου",
+		"project.LocationPlaceholder": "Τοποθεσία Έργου",
+		"project.DescriptionPlaceholder": "Περιγραφή Έργου",
+		"projects.amount": "Ποσό",
+		"projects.generating": "Δημιουργία...",
+		"projects.generatingFile": "Δημιουργία Αρχείου...",
+		"projects.created": "Δημιουργήθηκε",
+		"project.offerFor": "Προσφορά για",
+		"projects.noInvoices": "Δεν υπάρχουν διαθέσιμα τιμολόγια",
+		
+		// Employees
+		"employees.title": "Υπάλληλοι",
+		"employees.create": "Προσθήκη Υπαλλήλου",
+		"employees.firstName": "Όνομα",
+		"employees.lastName": "Επώνυμο",
+		"employees.rate": "Αμοιβή",
+		"employees.workDays": "Ημέρες Εργασίας",
+		"employees.role": "Ρόλος",
+		"employees.newRole": "Δημιουργία νέου ρόλου",
+		"employees.selectRole": "Επιλέξτε ρόλο",
+		"employees.noEmployees": "Δεν έχουν ανατεθεί υπάλληλοι",
+		"employees.deleteEmployee": "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον υπάλληλο;",
+		"employees.newRolePlaceholder": "Όνομα Νέου Ρόλου",
+		"employees.details.title": "Λεπτομέρειες Υπαλλήλου",
+		"employees.details.fullName": "Πλήρες Όνομα",
+		"employees.details.role": "Ρόλος",
+		"employees.projects.title": "Έργα",
+		"employees.projects.rate": "Αμοιβή",
+		"employees.projects.workDays": "Ημέρες Εργασίας",
+		"employees.projects.total": "Σύνολο",
+		"employees.invoices.title": "Τιμολόγια",
+		"employees.invoices.noInvoices": "Δεν υπάρχουν διαθέσιμα τιμολόγια",
+		"employees.goTo": "Μετάβαση στους Υπαλλήλους",
+		"employees.assignEmployees": "Ανάθεση Υπαλλήλων",
+		"employees.searchPlaceholder": "Αναζήτηση υπαλλήλων...",
+		"employees.select": "Επιλέξτε",
+		"employees.name": "Όνομα",
+		"employees.alreadyAssigned": "Έχει ήδη ανατεθεί",
+		"employees.viewAllEmployees": "Προβολή Όλων των Υπαλλήλων",
+		"employees.rateWorkDaysInfo": "Πληροφορίες για την Αμοιβή και τις Ημέρες Εργασίας",
+
+		// Expenses
+		"expenses.title": "Έξοδα",
+		"expenses.create": "Προσθήκη Εξόδου",
+		"expenses.name": "Όνομα Εξόδου",
+		"expenses.category": "Κατηγορία",
+		"expenses.price": "Τιμή",
+		"expenses.quantity": "Ποσότητα",
+		"expenses.total": "Σύνολο",
+		"expenses.noExpenses": "Δεν υπάρχουν έξοδα ακόμη",
+		"expenses.selectexpense": "Επιλέξτε Έξοδο",
+		"expenses.qty": "Ποσότητα",
+		"expenses.add": "Προσθήκη Εξόδου",
+		"expenses.edit": "Επεξεργασία Εξόδου",
+		"expenses.delete": "Διαγραφή Εξόδου",
+		"expenses.totalExpenses": "Συνολικά Έξοδα",
+		"expenses.addNewExpense": "Προσθήκη Νέου Εξόδου",
+		
+		// Invoices
+		"invoices.title": "Τιμολόγια",
+		"invoices.amount": "Ποσό",
+		"invoices.createdAt": "Ημερομηνία Δημιουργίας",
+		"invoices.noInvoices": "Δεν υπάρχουν τιμολόγια ακόμη",
+		"invoices.goTo": "Μετάβαση στα Τιμολόγια",
+		
+		// Settings
+		"settings.title": "Ρυθμίσεις",
+		"settings.user": "Ρυθμίσεις Χρήστη",
+		"settings.preferences": "Προτιμήσεις",
+		"settings.company": "Στοιχεία Εταιρείας",
+		"settings.language": "Γλώσσα",
+		"settings.timezone": "Ζώνη Ώρας",
+		"settings.dateFormat": "Μορφή Ημερομηνίας",
+		"settings.notifications": "Ειδοποιήσεις",
+		
+		// Forms
+		"forms.required": "Αυτό το πεδίο είναι υποχρεωτικό",
+		"forms.invalidEmail": "Μη έγκυρη διεύθυνση email",
+		"forms.passwordsMatch": "Οι κωδικοί πρέπει να ταιριάζουν",
+		
+		// Messages
+		"messages.saved": "Αποθηκεύτηκε επιτυχώς",
+		"messages.deleted": "Διαγράφηκε επιτυχώς",
+		"messages.error": "Παρουσιάστηκε σφάλμα",
+
+		// Table
+		"table.name": "Όνομα",
+		"table.lastName": "Επώνυμο",
+		"table.rate": "Αμοιβή",
+		"table.workDays": "Ημέρες Εργασίας",
+		"table.role": "Ρόλος",
+		"table.category": "Κατηγορία",
+		"table.price": "Τιμή",
+		"table.quantity": "Ποσότητα",
+		"table.total": "Σύνολο",
+		"table.description": "Περιγραφή",
+		"table.category": "Κατηγορία",
+		"table.qty": "Ποσότητα",
+		"table.actions": "Ενέργειες",
+
+		// Button Text
+		"button.viewEmployee": "Προβολή Υπαλλήλου",
+		"button.addEmployee": "Προσθήκη Υπαλλήλου",
+		"button.viewProject": "Προβολή Έργου",
+		"button.viewAllEmployees": "Προβολή Όλων των Υπαλλήλων",
+
+		// Projects Table
+		"projects.table.name": "Όνομα Έργου",
+		"projects.table.location": "Τοποθεσία",
+		"projects.table.description": "Περιγραφή",
+		"projects.table.actions": "Ενέργειες",
+
+		// Welcome Back
+		"welcome.back": "Καλώς ήρθατε πίσω!",
+
+		}
+	},
+	sq: {
+		translation: {
+		// Navigation
+		"nav.dashboard": "Paneli",
+		"nav.projects": "Projektet",
+		"nav.employees": "Punonjësit",
+		"nav.expenses": "Shpenzimet",
+		"nav.invoices": "Faturat",
+		"nav.settings": "Cilësimet",
+		"nav.logout": "Dilni",
+
+		// Common
+		"common.yes": "Po",
+		"common.no": "Jo",
+		"common.save": "Ruaj",
+		"common.cancel": "Anulo",
+		"common.edit": "Modifiko",
+		"common.delete": "Fshij",
+		"common.add": "Shto",
+		"common.loading": "Duke u ngarkuar...",
+		"common.error": "Gabim",
+		"common.success": "Sukses",
+		"common.back": "Mbrapa",
+		"common.next": "Tjetra",
+		"common.previous": "E mëparshme",
+		"common.search": "Kërko",
+		"common.actions": "Veprimet",
+		"common.deleteQ": "A jeni të sigurt që dëshironi të fshini këtë",
+		"common.update": "Përditëso",
+		"common.download": "Shkarko",
+		
+		// Auth
+		"auth.login": "Hyrje",
+		"auth.register": "Regjistrohu",
+		"auth.email": "Email",
+		"auth.password": "Fjalëkalimi",
+		"auth.name": "Emri i Plotë",
+		"auth.confirmPassword": "Konfirmo Fjalëkalimin",
+		"auth.invalidCredentials": "Të dhëna të pavlefshme",
+
+		// Projects
+		"projects.title": "Projektet",
+		"projects.create": "Krijo Projekt",
+		"projects.name": "Emri i Projektit",
+		"projects.location": "Vendndodhja",
+		"projects.description": "Përshkrimi",
+		"projects.employees": "Punonjësit",
+		"projects.expenses": "Shpenzimet",
+		"projects.invoices": "Faturat",
+		"projects.offers": "Ofertat",
+		"projects.assignEmployees": "Cakto Punonjësit",
+		"projects.noProjects": "Asnjë projekt ende",
+		"projects.generateOffer": "Gjenero PDF Ofertë",
+		"projects.viewAll": "Shiko të Gjitha",
+		"projects.addProject": "Shto Projekt",
+		"projects.deleteProject": "Fshij Projekt",
+		"projects.addButton": "Shto",
+		"project.NamePlaceholder": "Emri i Projektit",
+		"project.LocationPlaceholder": "Vendndodhja e Projektit",
+		"project.DescriptionPlaceholder": "Përshkrimi i Projektit",
+		"projects.amount": "Shuma",
+		"projects.generating": "Duke Gjeneruar...",
+		"projects.generatingFile": "Duke Gjeneruar Skedarin...",
+		"projects.created": "U Krijua",
+		"project.offerFor": "Ofertë për",
+		"projects.noInvoices": "Nuk ka fatura të disponueshme",
+		
+		// Employees
+		"employees.title": "Punonjësit",
+		"employees.create": "Shto Punonjës",
+		"employees.firstName": "Emri",
+		"employees.lastName": "Mbiemri",
+		"employees.rate": "Paga",
+		"employees.workDays": "Ditët e Punës",
+		"employees.role": "Roli",
+		"employees.newRole": "Krijo rol të ri",
+		"employees.selectRole": "Zgjidh një rol",
+		"employees.noEmployees": "Nuk ka punonjës të caktuar",
+		"employees.deleteEmployee": "A jeni të sigurt që dëshironi të fshini këtë punonjës?",
+		"employees.newRolePlaceholder": "Emri i Rolit të Ri",
+		"employees.details.title": "Detajet e Punonjësit",
+		"employees.details.fullName": "Emri i Plotë",
+		"employees.details.role": "Roli",
+		"employees.projects.title": "Projektet",
+		"employees.projects.rate": "Paga",
+		"employees.projects.workDays": "Ditët e Punës",
+		"employees.projects.total": "Totali",
+		"employees.invoices.title": "Faturat",
+		"employees.invoices.noInvoices": "Nuk ka fatura të disponueshme",
+		"employees.goTo": "Shko te Punonjësit",
+		"employees.assignEmployees": "Cakto Punonjësit",
+		"employees.searchPlaceholder": "Kërko punonjës...",
+		"employees.select": "Zgjidh",
+		"employees.name": "Emri",
+		"employees.alreadyAssigned": "Tashmë i caktuar",
+		"employees.viewAllEmployees": "Shiko të Gjithë Punonjësit",
+		"employees.rateWorkDaysInfo": "Përshkrimi i pagesës dhe ditëve të punës",
+
+		// Expenses
+		"expenses.title": "Shpenzimet",
+		"expenses.create": "Shto Shpenzim",
+		"expenses.name": "Emri i Shpenzimit",
+		"expenses.category": "Kategoria",
+		"expenses.price": "Çmimi",
+		"expenses.quantity": "Sasia",
+		"expenses.total": "Totali",
+		"expenses.noExpenses": "Nuk ka shpenzime ende",
+		"expenses.selectExpense": "Zgjidh Shpenzimin",
+		"expenses.qty": "Sasia",
+		"expenses.add": "Shto Shpenzim",
+		"expenses.edit": "Modifiko Shpenzimin",
+		"expenses.delete": "Fshij Shpenzimin",
+		"expenses.totalExpenses": "Shpenzimet Totale",
+		"expenses.addNewExpense": "Shto Shpenzim të Ri",
+		
+		// Invoices
+		"invoices.title": "Faturat",
+		"invoices.amount": "Shuma",
+		"invoices.createdAt": "Data e Krijimit",
+		"invoices.noInvoices": "Nuk ka fatura ende",
+		"invoices.goTo": "Shko te Faturat",
+		
+		// Settings
+		"settings.title": "Cilësimet",
+		"settings.user": "Cilësimet e Përdoruesit",
+		"settings.preferences": "Preferencat",
+		"settings.company": "Detajet e Kompanisë",
+		"settings.language": "Gjuha",
+		"settings.timezone": "Zona Kohore",
+		"settings.dateFormat": "Formati i Datës",
+		"settings.notifications": "Njoftimet",
+		
+		// Forms
+		"forms.required": "Kjo fushë është e detyrueshme",
+		"forms.invalidEmail": "Adresa e email-it është e pavlefshme",
+		"forms.passwordsMatch": "Fjalëkalimet duhet të përputhen",
+		
+		// Messages
+		"messages.saved": "U ruajt me sukses",
+		"messages.deleted": "U fshi me sukses",
+		"messages.error": "Ndodhi një gabim",
+
+		// Table
+		"table.name": "Emri",
+		"table.lastName": "Mbiemri",
+		"table.rate": "Paga",
+		"table.workDays": "Ditët e Punës",
+		"table.role": "Roli",
+		"table.category": "Kategoria",
+		"table.price": "Çmimi",
+		"table.quantity": "Sasia",
+		"table.total": "Totali",
+		"table.description": "Përshkrimi",
+		"table.category": "Kategoria",
+		"table.qty": "Sasia",
+		"table.actions": "Veprimet",
+
+		// Button Text
+		"button.viewEmployee": "Shiko Punonjësin",
+		"button.addEmployee": "Shto Punonjës",
+		"button.viewProject": "Shiko Projektin",
+		"button.viewAllEmployees": "Shiko të Gjithë Punonjësit",
+
+		// Projects Table
+		"projects.table.name": "Emri i Projektit",
+		"projects.table.location": "Vendndodhja",
+		"projects.table.description": "Përshkrimi",
+		"projects.table.actions": "Veprimet",
+
+		// Welcome Back
+		"welcome.back": "Mirë se u ktheve!"
+		}
+	}
+};
+
+	i18n
+	.use(LanguageDetector)
+	.use(initReactI18next)
+	.init({
+			resources,
+			fallbackLng: 'en',
+			debug: process.env.NODE_ENV === 'development',
+			interpolation: {
+			escapeValue: false, // React already safes from XSS
+		},
+		detection: {
+			order: ['localStorage', 'navigator'],
+			caches: ['localStorage'],
+		},
+});
+
+export default i18n;

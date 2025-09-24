@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface Project {
 	id: number;
@@ -24,6 +25,7 @@ onSubmit,
 buttonText,
 className = "btn btn-primary mb-3",
 }: ProjectModalProps) {
+	const { t } = useTranslation();
 	const [showModal, setShowModal] = useState(false);
 	const [modalProject, setModalProject] = useState<Project>(
 		project || { id: 0, name: "", location: "", description: "" }
@@ -49,12 +51,16 @@ className = "btn btn-primary mb-3",
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (mode === "delete") {
-		onSubmit(modalProject, "delete");
+			onSubmit(modalProject, "delete");
 		} else {
-		onSubmit(modalProject, mode);
+			onSubmit(modalProject, mode);
 		}
 		closeModal();
 	};
+
+	// Replace hardcoded text with translations
+	const modalTitle = mode === "add" ? t("projects.create") : t("common.edit");
+	const submitButtonText = mode === "add" ? t("common.add") : t("common.save");
 
 	return (
 		<>
@@ -71,11 +77,11 @@ className = "btn btn-primary mb-3",
 								{mode === "delete" ? (
 								<>
 									<div className="modal-header">
-										<h5 className="modal-title">Delete Project</h5>
+										<h5 className="modal-title">{t("projects.deleteProject")}</h5>
 										<button type="button" className="btn-close" onClick={closeModal} />
 									</div>
 									<div className="modal-body">
-										Are you sure you want to delete <b>{project?.name}</b>?
+										{t("common.deleteQ")} <b>{project?.name}</b>?
 									</div>
 									<div className="modal-footer">
 										<button type="button" className="btn btn-secondary" onClick={closeModal}>
@@ -89,27 +95,27 @@ className = "btn btn-primary mb-3",
 								) : (
 									<form onSubmit={handleSubmit}>
 										<div className="modal-header">
-											<h5 className="modal-title">{mode === "edit" ? "Edit Project" : "Add Project"}</h5>
+											<h5 className="modal-title">{modalTitle}</h5>
 											<button type="button" className="btn-close" onClick={closeModal} />
 										</div>
 										<div className="modal-body">
 											<input
 												className="form-control mb-2"
-												placeholder="Name"
+												placeholder={t("project.NamePlaceholder")}
 												value={modalProject.name}
 												onChange={(e) => setModalProject({ ...modalProject, name: e.target.value })}
 												required
 											/>
 											<input
 												className="form-control mb-2"
-												placeholder="Location"
+												placeholder={t("project.LocationPlaceholder")}
 												value={modalProject.location}
 												onChange={(e) => setModalProject({ ...modalProject, location: e.target.value })}
 												required
 											/>
 											<textarea
 												className="form-control mb-2"
-												placeholder="Description"
+												placeholder={t("project.DescriptionPlaceholder")}
 												value={modalProject.description}
 												onChange={(e) => setModalProject({ ...modalProject, description: e.target.value })}
 												required
@@ -120,7 +126,7 @@ className = "btn btn-primary mb-3",
 												Close
 											</button>
 											<button type="submit" className="btn btn-primary">
-												{mode === "edit" ? "Save Changes" : "Add Project"}
+												{submitButtonText}
 											</button>
 										</div>
 									</form>

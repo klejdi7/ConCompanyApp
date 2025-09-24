@@ -40,13 +40,18 @@ Employees CRUD
 */
 
 router.get("/employees", authMiddleware, async (req, res) => {
-const list = await prisma.employee.findMany({ 
-	include: {
-	role: true // Include role information
-	},
-	orderBy: { createdAt: "desc" } 
-});
-res.json(list);
+	try {
+		const list = await prisma.employee.findMany({ 
+			include: {
+				role: true // Include role information
+			},
+			orderBy: { createdAt: "desc" } 
+		});
+		res.json(list);
+	} catch (err) {
+		console.error("Error fetching employees:", err);
+		res.status(500).json({ error: "Failed to fetch employees" });
+	}
 });
 
 router.get("/employees/:id", authMiddleware, async (req, res) => {
@@ -333,7 +338,7 @@ router.post("/projects/:id/expenses", authMiddleware, async (req, res) => {
 		const projectId = Number(req.params.id);
 		const { expenseId, expenseName, categoryName, price, quantity } = req.body;
 
-		const finalExpenseId = await addOrCreateExpense(expenseId, expenseName, categoryName);
+		const finalExpenseId = await f.addOrCreateExpense(expenseId, expenseName, categoryName);
 
 		// Add to ProjectExpenses
 		const projectExpense = await prisma.projectExpenses.create({

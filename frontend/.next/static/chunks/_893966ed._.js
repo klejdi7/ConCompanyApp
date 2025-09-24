@@ -16,23 +16,25 @@ var _s = __turbopack_context__.k.signature();
 ;
 const useAuthGuard = ()=>{
     _s();
-    const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { user, loading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "useAuthGuard.useEffect": ()=>{
-            if (!user) {
+            if (!loading && !user) {
                 router.push("/not_authorized");
             }
         }
     }["useAuthGuard.useEffect"], [
         user,
+        loading,
         router
     ]);
     return {
-        user
+        user,
+        loading
     };
 };
-_s(useAuthGuard, "VvmgW5gML8gtJ8g+p6fOEJP2gYk=", false, function() {
+_s(useAuthGuard, "Zr2WDa/YWeMetzDhcnOimt0LiKE=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
@@ -54,9 +56,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/context/AuthContext.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuthGuard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/hooks/useAuthGuard.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/axios/lib/axios.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/react-i18next/dist/es/index.js [app-client] (ecmascript) <locals>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-i18next/dist/es/useTranslation.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
+;
 ;
 ;
 ;
@@ -68,12 +73,13 @@ function InvoicesPage() {
     const [modalInvoice, setModalInvoice] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isEdit, setIsEdit] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuthGuard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthGuard"])();
+    const { t } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"])();
     if (!user) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
             children: "Redirecting..."
         }, void 0, false, {
             fileName: "[project]/src/app/invoices/page.tsx",
-            lineNumber: 22,
+            lineNumber: 24,
             columnNumber: 12
         }, this);
     }
@@ -141,12 +147,15 @@ function InvoicesPage() {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                 children: [
-                    "Invoices ",
-                    user && "- Welcome, ".concat(user.name)
+                    t("invoices.title"),
+                    " ",
+                    user && "- ".concat(t("invoices.welcome", {
+                        name: user.name
+                    }))
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/invoices/page.tsx",
-                lineNumber: 82,
+                lineNumber: 84,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -159,10 +168,10 @@ function InvoicesPage() {
                         amount: 0,
                         date: ""
                     }),
-                children: "Add Invoice"
+                children: t("invoices.addInvoice")
             }, void 0, false, {
                 fileName: "[project]/src/app/invoices/page.tsx",
-                lineNumber: 83,
+                lineNumber: 85,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("table", {
@@ -172,42 +181,42 @@ function InvoicesPage() {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Project ID"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/invoices/page.tsx",
-                                    lineNumber: 97,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Amount"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/app/invoices/page.tsx",
-                                    lineNumber: 98,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Date"
+                                    children: t("invoices.projectId")
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/invoices/page.tsx",
                                     lineNumber: 99,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
-                                    children: "Actions"
+                                    children: t("invoices.amount")
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/invoices/page.tsx",
                                     lineNumber: 100,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    children: t("invoices.date")
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/invoices/page.tsx",
+                                    lineNumber: 101,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
+                                    children: t("invoices.actions")
+                                }, void 0, false, {
+                                    fileName: "[project]/src/app/invoices/page.tsx",
+                                    lineNumber: 102,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/invoices/page.tsx",
-                            lineNumber: 96,
+                            lineNumber: 98,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/invoices/page.tsx",
-                        lineNumber: 95,
+                        lineNumber: 97,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -217,21 +226,21 @@ function InvoicesPage() {
                                         children: inv.projectId
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 106,
+                                        lineNumber: 108,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: inv.amount
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 107,
+                                        lineNumber: 109,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
                                         children: inv.date
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 108,
+                                        lineNumber: 110,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -244,42 +253,42 @@ function InvoicesPage() {
                                                     setModalInvoice(inv);
                                                     setIsEdit(true);
                                                 },
-                                                children: "Edit"
+                                                children: t("invoices.edit")
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                                lineNumber: 110,
+                                                lineNumber: 112,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                 className: "btn btn-danger",
                                                 onClick: ()=>handleDelete(inv.id),
-                                                children: "Delete"
+                                                children: t("invoices.delete")
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                                lineNumber: 121,
+                                                lineNumber: 123,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 109,
+                                        lineNumber: 111,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, inv.id, true, {
                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                lineNumber: 105,
+                                lineNumber: 107,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/app/invoices/page.tsx",
-                        lineNumber: 103,
+                        lineNumber: 105,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/invoices/page.tsx",
-                lineNumber: 94,
+                lineNumber: 96,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -299,12 +308,12 @@ function InvoicesPage() {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
                                         className: "modal-title",
                                         children: [
-                                            isEdit ? "Edit" : "Add",
+                                            isEdit ? t("invoices.edit") : t("invoices.add"),
                                             " Invoice"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 135,
+                                        lineNumber: 137,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -313,13 +322,13 @@ function InvoicesPage() {
                                         "data-bs-dismiss": "modal"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 136,
+                                        lineNumber: 138,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                lineNumber: 134,
+                                lineNumber: 136,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -328,7 +337,7 @@ function InvoicesPage() {
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                         type: "number",
                                         className: "form-control mb-2",
-                                        placeholder: "Project ID",
+                                        placeholder: t("invoices.projectId"),
                                         value: (modalInvoice === null || modalInvoice === void 0 ? void 0 : modalInvoice.projectId) || 0,
                                         onChange: (e)=>setModalInvoice((prev)=>({
                                                     ...prev,
@@ -337,13 +346,13 @@ function InvoicesPage() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 141,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                         type: "number",
                                         className: "form-control mb-2",
-                                        placeholder: "Amount",
+                                        placeholder: t("invoices.amount"),
                                         value: (modalInvoice === null || modalInvoice === void 0 ? void 0 : modalInvoice.amount) || 0,
                                         onChange: (e)=>setModalInvoice((prev)=>({
                                                     ...prev,
@@ -352,7 +361,7 @@ function InvoicesPage() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 151,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -366,13 +375,13 @@ function InvoicesPage() {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 159,
+                                        lineNumber: 161,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                lineNumber: 138,
+                                lineNumber: 140,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -382,54 +391,55 @@ function InvoicesPage() {
                                         type: "button",
                                         className: "btn btn-secondary",
                                         "data-bs-dismiss": "modal",
-                                        children: "Close"
+                                        children: t("invoices.close")
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 170,
+                                        lineNumber: 172,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         type: "submit",
                                         className: "btn btn-primary",
-                                        children: isEdit ? "Save Changes" : "Add Invoice"
+                                        children: isEdit ? t("invoices.saveChanges") : t("invoices.addInvoice")
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/invoices/page.tsx",
-                                        lineNumber: 173,
+                                        lineNumber: 175,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/invoices/page.tsx",
-                                lineNumber: 169,
+                                lineNumber: 171,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/invoices/page.tsx",
-                        lineNumber: 133,
+                        lineNumber: 135,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/app/invoices/page.tsx",
-                    lineNumber: 132,
+                    lineNumber: 134,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/invoices/page.tsx",
-                lineNumber: 131,
+                lineNumber: 133,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/invoices/page.tsx",
-        lineNumber: 81,
+        lineNumber: 83,
         columnNumber: 5
     }, this);
 }
-_s(InvoicesPage, "YqU0ao0vrRKdT/lyTdhchxcNwFE=", false, function() {
+_s(InvoicesPage, "eDKazRKisWi2AcKsBigxRE/mxeg=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$context$2f$AuthContext$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuthGuard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthGuard"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$hooks$2f$useAuthGuard$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuthGuard"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$i18next$2f$dist$2f$es$2f$useTranslation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useTranslation"]
     ];
 });
 _c = InvoicesPage;

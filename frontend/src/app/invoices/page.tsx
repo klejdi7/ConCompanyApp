@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface Invoice {
   id: number;
@@ -17,6 +18,7 @@ export default function InvoicesPage() {
   const [modalInvoice, setModalInvoice] = useState<Invoice | null>(null);
   const [isEdit, setIsEdit] = useState(false);
   const { user } = useAuthGuard();
+  const { t } = useTranslation();
 
   if (!user) {
     return <p>Redirecting...</p>;
@@ -79,7 +81,7 @@ export default function InvoicesPage() {
 
   return (
     <div className="container py-5">
-      <h2>Invoices {user && `- Welcome, ${user.name}`}</h2>
+      <h2>{t("invoices.title")} {user && `- ${t("invoices.welcome", { name: user.name })}`}</h2>
       <button
         className="btn btn-success mb-3"
         data-bs-toggle="modal"
@@ -88,16 +90,16 @@ export default function InvoicesPage() {
           setModalInvoice({ id: 0, projectId: 0, amount: 0, date: "" })
         }
       >
-        Add Invoice
+        {t("invoices.addInvoice")}
       </button>
 
       <table className="table table-striped">
         <thead>
           <tr>
-            <th>Project ID</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Actions</th>
+            <th>{t("invoices.projectId")}</th>
+            <th>{t("invoices.amount")}</th>
+            <th>{t("invoices.date")}</th>
+            <th>{t("invoices.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -116,10 +118,10 @@ export default function InvoicesPage() {
                     setIsEdit(true);
                   }}
                 >
-                  Edit
+                  {t("invoices.edit")}
                 </button>
                 <button className="btn btn-danger" onClick={() => handleDelete(inv.id)}>
-                  Delete
+                  {t("invoices.delete")}
                 </button>
               </td>
             </tr>
@@ -132,14 +134,14 @@ export default function InvoicesPage() {
         <div className="modal-dialog">
           <form className="modal-content" onSubmit={handleSubmit}>
             <div className="modal-header">
-              <h5 className="modal-title">{isEdit ? "Edit" : "Add"} Invoice</h5>
+              <h5 className="modal-title">{isEdit ? t("invoices.edit") : t("invoices.add")} Invoice</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body">
               <input
                 type="number"
                 className="form-control mb-2"
-                placeholder="Project ID"
+                placeholder={t("invoices.projectId")}
                 value={modalInvoice?.projectId || 0}
                 onChange={(e) =>
                   setModalInvoice((prev) => ({ ...prev!, projectId: Number(e.target.value) }))
@@ -149,7 +151,7 @@ export default function InvoicesPage() {
               <input
                 type="number"
                 className="form-control mb-2"
-                placeholder="Amount"
+                placeholder={t("invoices.amount")}
                 value={modalInvoice?.amount || 0}
                 onChange={(e) =>
                   setModalInvoice((prev) => ({ ...prev!, amount: Number(e.target.value) }))
@@ -168,10 +170,10 @@ export default function InvoicesPage() {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                Close
+                {t("invoices.close")}
               </button>
               <button type="submit" className="btn btn-primary">
-                {isEdit ? "Save Changes" : "Add Invoice"}
+                {isEdit ? t("invoices.saveChanges") : t("invoices.addInvoice")}
               </button>
             </div>
           </form>

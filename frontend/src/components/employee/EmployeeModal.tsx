@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import api from "@/services/api";
 
 export interface Role {
@@ -32,6 +33,8 @@ export default function EmployeeModal({
 	buttonText,
 	className = "btn btn-primary mb-3",
 }: EmployeeModalProps) {
+	const { t } = useTranslation();
+
 	const [showModal, setShowModal] = useState(false);
 	const [modalEmployee, setModalEmployee] = useState<Employee>(
 		employee || { id: 0, firstName: "", lastName: "", roleId: 0, roleName: "" }
@@ -113,11 +116,20 @@ export default function EmployeeModal({
 		closeModal();
 	}, [employee, mode, modalEmployee, onSubmit, showNewRoleInput]);
 
+	// Replace hardcoded text with translations
+	const modalTitle = mode === "add" ? t("employees.create") : t("common.edit");
+	const submitButtonText = mode === "add" ? t("common.add") : t("common.save");
+
 	return (
 		<>
 			{/* Open button */}
 			<button className={className} onClick={openModal}>
-				{buttonText || (mode === "edit" ? "Edit Employee" : mode === "delete" ? "Delete Employee" : "Add Employee")}
+				{buttonText ||
+					(mode === "edit"
+						? `${t("common.edit")} ${t("employees.title")}`
+						: mode === "delete"
+						? `${t("common.delete")} ${t("employees.title")}`
+						: `${t("common.add")} ${t("employees.title")}`)}
 			</button>
 
 			{/* Modal */}
@@ -146,17 +158,17 @@ export default function EmployeeModal({
 											<button type="button" className="btn-close" onClick={closeModal} />
 										</div>
 										<div className="modal-body">
-											<p>Are you sure you want to delete this employee?</p>
+											<p>{t("employees.deleteEmployee")}</p>
 											<p>
 												<strong>{employee?.firstName} {employee?.lastName}</strong>
 											</p>
 										</div>
 										<div className="modal-footer">
 											<button type="button" className="btn btn-secondary" onClick={closeModal}>
-												No
+												{t("common.no")}
 											</button>
 											<button type="button" className="btn btn-danger" onClick={() => handleSubmit()}>
-												Yes
+												{t("common.yes")}
 											</button>
 										</div>
 									</>
@@ -164,14 +176,14 @@ export default function EmployeeModal({
 									<form onSubmit={handleSubmit}>
 										<div className="modal-header">
 											<h5 className="modal-title" id="modal-title">
-												{mode === "edit" ? "Edit Employee" : "Add Employee"}
+												{modalTitle}
 											</h5>
 											<button type="button" className="btn-close" onClick={closeModal} />
 										</div>
 										<div className="modal-body">
 											<input
 												className="form-control mb-2"
-												placeholder="First Name"
+												placeholder={t("employees.firstName")}
 												value={modalEmployee.firstName}
 												onChange={(e) =>
 													setModalEmployee({ ...modalEmployee, firstName: e.target.value })
@@ -180,7 +192,7 @@ export default function EmployeeModal({
 											/>
 											<input
 												className="form-control mb-2"
-												placeholder="Last Name"
+												placeholder={t("employees.lastName")}
 												value={modalEmployee.lastName}
 												onChange={(e) =>
 													setModalEmployee({ ...modalEmployee, lastName: e.target.value })
@@ -203,19 +215,19 @@ export default function EmployeeModal({
 														onChange={handleRoleChange}
 														required
 													>
-														<option value="0">Select a role</option>
+														<option value="0">{t("employees.selectRole")}</option>
 														{roles.map(role => (
 															<option key={role.id} value={role.id}>
 																{role.name}
 															</option>
 														))}
-														<option value="new">+ Create new role</option>
+														<option value="new">{t("employees.newRole")}</option>
 													</select>
 													
 													{showNewRoleInput && (
 														<input
 															className="form-control mb-2"
-															placeholder="New Role Name"
+															placeholder={t("employees.newRolePlaceholder")}
 															value={modalEmployee.roleName}
 															onChange={(e) =>
 																setModalEmployee({ ...modalEmployee, roleName: e.target.value })
@@ -235,7 +247,7 @@ export default function EmployeeModal({
 												className="btn btn-primary"
 												disabled={loadingRoles}
 											>
-												{mode === "edit" ? "Save Changes" : "Add Employee"}
+												{submitButtonText}
 											</button>
 										</div>
 									</form>

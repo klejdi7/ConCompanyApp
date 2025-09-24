@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import api from "@/services/api";
-import ProjectModal, { Project } from "@/components/ProjectModal";
+import ProjectModal, { Project } from "@/components/project/ProjectModal";
 import Loading from "@/components/Loading";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function ProjectsPage() {
+	const { t } = useTranslation();
 	const { token } = useAuth();
 	const { user, loading: authLoading } = useAuthGuard();
 	const [projects, setProjects] = useState<Project[]>([]);
@@ -49,25 +51,25 @@ export default function ProjectsPage() {
 
 	return (
 		<div className="container mt-4">
-			<h2>Projects</h2>
+			<h2>{t("projects.title")}</h2>
 
 			{/* Add button */}
 			<ProjectModal
 				mode="add"
 				onSubmit={(proj) => handleAction(proj, "add")}
-				buttonText="Add Project"
+				buttonText={t("projects.addProject")}
 			/>
 
 			{loading ? (
-				<Loading text="Fetching projects..." />
+				<Loading text={t("projects.loading")} />
 			) : (
 				<table className="table table-striped">
 					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Location</th>
-							<th>Description</th>
-							<th>Actions</th>
+							<th>{t("projects.table.name")}</th>
+							<th>{t("projects.table.location")}</th>
+							<th>{t("projects.table.description")}</th>
+							<th>{t("projects.table.actions")}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -80,21 +82,21 @@ export default function ProjectsPage() {
 								<td>
 									<Link href={`/projects/${proj.id}`}>
 										<button className="btn btn-primary btn-sm me-2">
-											<FaEye /> Open Project
+											<FaEye /> {t("button.viewProject")}
 										</button>
 									</Link>
 									<ProjectModal
 										mode="edit"
 										project={proj}
 										onSubmit={(proj) => handleAction(proj, "edit")}
-										buttonText={<><FaEdit /> Edit</>}
+										buttonText={<><FaEdit /> {t("common.edit")}</>}
 										className="btn btn-success btn-sm me-2"
 									/>
 									<ProjectModal
 										mode="delete"
 										project={proj}
 										onSubmit={(proj) => handleAction(proj, "delete")}
-										buttonText={<><FaTrash /> Delete</>}
+										buttonText={<><FaTrash /> {t("common.delete")}</>}
 										className="btn btn-danger btn-sm"
 									/>
 								</td>

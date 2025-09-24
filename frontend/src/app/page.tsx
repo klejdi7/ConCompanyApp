@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
 	const { user } = useAuth();
 	const [mounted, setMounted] = useState(false);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		setMounted(true);
@@ -19,13 +21,17 @@ export default function Home() {
 
 	return (
 		<div className="container mt-5">
-			<h1 className="mb-4">🏗️ Construction Management Dashboard</h1>
+			<h1 className="mb-4">{t("nav.dashboard")}</h1>
 
 			{user ? (
-				<div className="alert alert-success"> Welcome back, <strong>{user.name}</strong>! </div>
+				<div className="alert alert-success">
+					{" "}
+					{t("welcome.back")}, <strong>{user.name}</strong>!{" "}
+				</div>
 			) : (
 				<div className="alert alert-warning">
-					You are not logged in. <Link href="/login">Login here</Link>
+					{t("welcome.notLoggedIn")}.{" "}
+					<Link href="/login">{t("welcome.loginHere")}</Link>
 				</div>
 			)}
 
@@ -33,12 +39,12 @@ export default function Home() {
 				<div className="col-md-4">
 					<div className="card shadow-sm">
 						<div className="card-body">
-							<h5 className="card-title">👷 Employees</h5>
+							<h5 className="card-title">👷 {t("employees.title")}</h5>
 							<p className="card-text">
-								Manage employees, their rates, and assign them to projects.
+								{t("employees.description")}
 							</p>
 							<Link href="/employees" className="btn btn-primary">
-								Go to Employees
+								{t("employees.goTo")}
 							</Link>
 						</div>
 					</div>
@@ -47,26 +53,26 @@ export default function Home() {
 				<div className="col-md-4">
 					<div className="card shadow-sm">
 						<div className="card-body">
-							<h5 className="card-title">🏗️ Projects</h5>
+							<h5 className="card-title">🏗️ {t("projects.title")}</h5>
 							<p className="card-text">
-								Track construction projects, locations, budgets, and expenses.
+								{t("projects.description")}
 							</p>
 							<Link href="/projects" className="btn btn-primary">
-								Go to Projects
+								{t("projects.goTo")}
 							</Link>
-							</div>
+						</div>
 					</div>
 				</div>
 
 				<div className="col-md-4">
 					<div className="card shadow-sm">
 						<div className="card-body">
-							<h5 className="card-title">💰 Invoices</h5>
+							<h5 className="card-title">💰 {t("invoices.title")}</h5>
 							<p className="card-text">
-								Generate and manage invoices for clients and contractors.
+								{t("invoices.description")}
 							</p>
 							<Link href="/invoices" className="btn btn-primary">
-								Go to Invoices
+								{t("invoices.goTo")}
 							</Link>
 						</div>
 					</div>

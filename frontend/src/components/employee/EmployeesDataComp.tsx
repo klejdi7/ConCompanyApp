@@ -5,6 +5,7 @@ import api from "@/services/api";
 import EmployeeModal from "./EmployeeModal";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export interface Role {
 	id: number;
@@ -45,12 +46,12 @@ export default function EmployeeDataComp({
 	onClose,
 	limit,
 	displayActions = true,
-	buttonText = "View All Employees",
 	className = "btn btn-primary mb-3 btn-sm",
 	allowSearch = false,
 	callback,
 	projectMode = false,
 }: EmployeeDataCompProps) {
+	const { t } = useTranslation();
 	const [fadeIn, setFadeIn] = useState(false);
 	const [showModal, setShowModal] = useState(show);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -103,11 +104,11 @@ export default function EmployeeDataComp({
 		<table className="table mt-3">
 			<thead>
 				<tr>
-					<th scope="col">Name</th>
-					<th scope="col">Last Name</th>
-					{projectMode && <th scope="col">Rate</th>}
-					{projectMode && <th scope="col">Work Days</th>}
-					<th scope="col">Actions</th>
+					<th scope="col">{t("table.name")}</th>
+					<th scope="col">{t("table.lastName")}</th>
+					{projectMode && <th scope="col">{t("table.rate")}</th>}
+					{projectMode && <th scope="col">{t("table.workDays")}</th>}
+					<th scope="col">{t("table.actions")}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -160,7 +161,7 @@ export default function EmployeeDataComp({
 										className="btn btn-success btn-sm"
 										onClick={() => handleSave(emp.projectEmployeeId || 0, emp.id)}
 									>
-										Save
+										{t("common.save")}
 									</button>
 								) : (
 									<button
@@ -169,7 +170,7 @@ export default function EmployeeDataComp({
 											setEditMode((prev) => ({ ...prev, [emp.id]: true }))
 										}
 									>
-										Update Employee
+										{t("common.edit")}
 									</button>
 								)}
 							</td>
@@ -178,21 +179,21 @@ export default function EmployeeDataComp({
 							<td>
 								<Link href={`/employees/${emp.id}`}>
 									<button className="btn btn-primary btn-sm me-2">
-										<FaEye /> View Employee
+										<FaEye /> {t("button.viewEmployee")}
 									</button>
 								</Link>
 								<EmployeeModal
 									mode="edit"
 									employee={emp}
 									onSubmit={(emp) => handleAction(emp, "edit")}
-									buttonText={<><FaEdit /> Edit </>}
+									buttonText={<><FaEdit /> {t("common.edit")} </>}
 									className="btn btn-success btn-sm me-2"
 								/>
 								<EmployeeModal
 									mode="delete"
 									employee={emp}
 									onSubmit={(emp) => handleAction(emp, "delete")}
-									buttonText={<><FaTrash /> Delete </>}
+									buttonText={<><FaTrash /> {t("common.delete")} </>}
 									className="btn btn-danger btn-sm"
 								/>
 							</td>
@@ -212,7 +213,7 @@ export default function EmployeeDataComp({
 			<>
 				<button className={className} onClick={() => setShowModal(true)}>
 					<FaEye style={{ marginRight: 6 }} />
-					{buttonText}
+					{t("button.viewAllEmployees")}
 				</button>
 
 				{showModal && (

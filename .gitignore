@@ -11,3 +11,6 @@ prisma/migrations/
 # Next.js
 .next/
 out/
+
+# Ignore generated offer PDFs
+public/

@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useAuthGuard } from "../../hooks/useAuthGuard";
 import api from "../../services/api";
-import EmployeeModal, { Employee } from "@/components/EmployeeModal";
-import EmployeesDataComp from "@/components/EmployeesDataComp";
+import EmployeeModal, { Employee } from "@/components/employee/EmployeeModal";
+import EmployeesDataComp from "@/components/employee/EmployeesDataComp";
 import Loading from "@/components/Loading"
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function EmployeesPage() {
+	const { t } = useTranslation();
 	const { token } = useAuth();
 	const { user, loading } = useAuthGuard();
 	const [employees, setEmployees] = useState<Employee[]>([]);
@@ -41,19 +43,23 @@ export default function EmployeesPage() {
 		}
 	};
 
-	if (loading) return <Loading text="Loading employees..." />;
-	if (!user) return <Loading text="Redirecting" />;
+	if (loading) return <Loading text={t("common.loading")} />;
+	if (!user) return <Loading text={t("common.redirecting")} />;
 
 	return (
 		<div className="container mt-5">
-			<h1>Employees</h1>
+			<h1>{t("employees.title")}</h1>
 
 			{/* Add Employee Button + Modal */}
 			<EmployeeModal mode="add" onSubmit={(emp) => emp && handleNew(emp)} />
 
 			{/* Employees Table */}
-			<EmployeesDataComp mode="table" employees={employees} allowSearch={true} callback={fetchEmployees} />
-
+			<EmployeesDataComp 
+				mode="table" 
+				employees={employees} 
+				allowSearch={true} 
+				callback={fetchEmployees} 
+			/>
 		</div>
 	);
 }

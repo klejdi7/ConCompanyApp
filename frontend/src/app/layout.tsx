@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from '../context/AuthContext';
 import Navbar from '../components/Navbar';
 import { useEffect } from 'react';
+import '@/lib/i18n';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 useEffect(() => {

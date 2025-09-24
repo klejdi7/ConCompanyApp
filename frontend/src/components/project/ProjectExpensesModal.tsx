@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import api from "../services/api";
+import api from "@/services/api";
+import { useTranslation } from "react-i18next";
 
 export interface ProjectExpensesModalProps {
 	isOpen: boolean;
@@ -22,6 +23,7 @@ expenses,
 allExpenses,
 fetchExpenses,
 }: ProjectExpensesModalProps) {
+	const { t } = useTranslation();
 
 	const [selectedExpense, setSelectedExpense] = useState<number | "new">();
 	const [newExpenseName, setNewExpenseName] = useState("");
@@ -92,7 +94,7 @@ fetchExpenses,
 			<div className="modal-dialog modal-xl">
 				<div className="modal-content">
 					<div className="modal-header">
-						<h5 className="modal-title">Project Expenses</h5>
+						<h5 className="modal-title">{t("expenses.title")}</h5>
 						<button className="btn-close" onClick={onClose}></button>
 					</div>
 					<div className="modal-body">
@@ -107,13 +109,13 @@ fetchExpenses,
 								}
 								required
 								>
-									<option value="">Select Expense</option>
+									<option value="">{t("expenses.selectExpense")}</option>
 										{allExpenses.map((exp) => (
 											<option key={exp.id} value={exp.id}>
 												{exp.name} ({exp.expenseCategories?.name})
 											</option>
 										))}
-										<option value="new">+ Add new expense</option>
+										<option value="new">+ {t("expenses.addNewExpense")}</option>
 								</select>
 							</div>
 
@@ -123,7 +125,7 @@ fetchExpenses,
 										<input
 										type="text"
 										className="form-control"
-										placeholder="Expense Name"
+										placeholder={t("expenses.name")}
 										value={newExpenseName}
 										onChange={(e) => setNewExpenseName(e.target.value)}
 										required
@@ -133,7 +135,7 @@ fetchExpenses,
 										<input
 										type="text"
 										className="form-control"
-										placeholder="Category"
+										placeholder={t("expenses.category")}
 										value={newCategory}
 										onChange={(e) => setNewCategory(e.target.value)}
 										required
@@ -145,14 +147,14 @@ fetchExpenses,
 							<div className="col-md-4">
 								<div className="row align-items-center">
 									<div className="col-md-4">
-										<label className="col-form-label">Quantity:</label>
+										<label className="col-form-label">{t("expenses.quantity")}:</label>
 									</div>
 									<div className="col-md-8">
 										<input
 											type="number"
 											className="form-control"
 											id="quantityInput"
-											placeholder="Qty"
+											placeholder={t("expenses.qty")}
 											min={1}
 											required
 											onChange={(e) => setQuantity(Number(e.target.value))}
@@ -164,14 +166,14 @@ fetchExpenses,
 							<div className="col-md-4">
 								<div className="row align-items-center">
 									<div className="col-md-4">
-										<label className="col-form-label">Price:</label>
+										<label className="col-form-label">{t("expenses.price")}:</label>
 									</div>
 									<div className="col-md-8">
 										<input
 											type="number"
 											className="form-control"
 											id="priceInput"
-											placeholder="Price"
+											placeholder={t("expenses.price")}
 											min={0}
 											step="0.01"
 											required
@@ -182,7 +184,7 @@ fetchExpenses,
 							</div>
 							<div className="col-md-2">
 								<button type="submit" className="btn btn-primary w-100">
-									Add
+									{t("expenses.add")}
 								</button>
 							</div>
 						</form>
@@ -191,18 +193,18 @@ fetchExpenses,
 						<table className="table table-striped">
 							<thead>
 								<tr>
-									<th>Name</th>
-									<th>Category</th>
-									<th>Quantity</th>
-									<th>Price</th>
-									<th>Total</th>
+									<th>{t("expenses.name")}</th>
+									<th>{t("expenses.category")}</th>
+									<th>{t("expenses.quantity")}</th>
+									<th>{t("expenses.price")}</th>
+									<th>{t("expenses.total")}</th>
 								</tr>
 							</thead>
 							<tbody>
 								{expenses.length === 0 ? (
 								<tr>
 									<td colSpan={4} className="text-center">
-										No expenses found.
+										{t("expenses.noExpensesFound")}
 									</td>
 								</tr>
 								) : (
@@ -241,21 +243,21 @@ fetchExpenses,
 											className="btn btn-success btn-sm me-2"
 											onClick={() => handleSave(pe.id)}
 										>
-											Save
+											{t("expenses.save")}
 										</button>
 										) : (
 										<button
 											className="btn btn-warning btn-sm me-2"
 											onClick={() => handleEdit(pe)}
 										>
-											Edit
+											{t("expenses.edit")}
 										</button>
 										)}
 										<button
 										className="btn btn-danger btn-sm"
 										onClick={() => setDeleteRow(pe.id)}
 										>
-										Delete
+										{t("expenses.delete")}
 										</button>
 									</td>
 									</tr>
@@ -267,7 +269,7 @@ fetchExpenses,
 						{expenses.length > 0 && (
 						<div className="text-end mt-2">
 							<h5>
-							Total Expenses:{" "}
+							{t("expenses.totalExpenses")}:{" "}
 							{expenses.reduce((acc, pe) => acc + pe.price * pe.Quantity, 0).toFixed(2)}
 							</h5>
 						</div>
@@ -286,13 +288,13 @@ fetchExpenses,
 					<div className="modal-dialog modal-sm">
 						<div className="modal-content">
 							<div className="modal-body">
-								<p>Are you sure you want to delete this expense?</p>
+								<p>{t("expenses.confirmDelete")}</p>
 								<div className="d-flex justify-content-end">
 									<button className="btn btn-secondary me-2" onClick={() => setDeleteRow(null)}>
-										Cancel
+										{t("expenses.cancel")}
 									</button>
 									<button className="btn btn-danger" onClick={handleDelete}>
-										Delete
+										{t("expenses.delete")}
 									</button>
 								</div>
 							</div>
