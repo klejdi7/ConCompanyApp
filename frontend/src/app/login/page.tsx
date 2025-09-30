@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import i18n from "@/lib/i18n";
 
 export default function LoginPage() {
 	const { t } = useTranslation();
@@ -22,6 +23,8 @@ export default function LoginPage() {
 		try {
 			const res = await axios.post("http://localhost:4000/auth/login", form);
 			await login(res.data.token);
+			i18n.changeLanguage(res.data.user.preferences.language);
+
 			router.push("/");
 		} catch (err) {
 			setError("Invalid email or password");

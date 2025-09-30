@@ -13,6 +13,7 @@ const resources = {
 		"nav.invoices": "Invoices",
 		"nav.settings": "Settings",
 		"nav.logout": "Logout",
+		"nav.login": "Login",
 		
 		// Common
 		"common.yes": "Yes",
@@ -33,6 +34,8 @@ const resources = {
 		"common.deleteQ": "Are you sure you want to delete",
 		"common.update": "Update",
 		"common.download": "Download",
+		"common.notAuthorizedMessage": "You are not authorized to view this page.",
+		"common.goToLogin": "Go to Login",
 		// Auth
 		"auth.login": "Login",
 		"auth.register": "Register",
@@ -47,7 +50,7 @@ const resources = {
 		"projects.create": "Create Project",
 		"projects.name": "Project Name",
 		"projects.location": "Location",
-		"projects.description": "Description",
+		"projects.description": "Manage your projects, tasks, and associated resources effectively.",
 		"projects.employees": "Employees",
 		"projects.expenses": "Expenses",
 		"projects.invoices": "Invoices",
@@ -68,6 +71,7 @@ const resources = {
 		"projects.created": "Created",
 		"project.offerFor": "Offer for",
 		"projects.noInvoices": "No invoices available",
+		"projects.goTo": "Go to Projects",
 		
 		// Employees
 		"employees.title": "Employees",
@@ -99,6 +103,7 @@ const resources = {
 		"employees.alreadyAssigned": "Already assigned",
 		"employees.viewAllEmployees": "View All Employees",
 		"employees.rateWorkDaysInfo": "Rate and Work Days Information",
+		"employees.description": "Manage the employees, their roles, and assignments within your projects.",
 
 		// Expenses
 		"expenses.title": "Expenses",
@@ -123,7 +128,8 @@ const resources = {
 		"invoices.createdAt": "Created At",
 		"invoices.noInvoices": "No invoices yet",
 		"invoices.goTo": "Go to Invoices",
-		
+		"invoices.description": "Track and manage all invoices related to your projects and employees.",
+
 		// Settings
 		"settings.title": "Settings",
 		"settings.user": "User Settings",
@@ -133,7 +139,44 @@ const resources = {
 		"settings.timezone": "Timezone",
 		"settings.dateFormat": "Date Format",
 		"settings.notifications": "Notifications",
-		
+		"settings.basicInformation": "Basic Information",
+		"settings.companyName": "Company Name",
+		"settings.vatNumber": "VAT Number",
+		"settings.contactInformation": "Contact Information",
+		"settings.emailAddress": "Email Address",
+		"settings.phoneNumber": "Phone Number",
+		"settings.addressInformation": "Address Information",
+		"settings.address": "Address",
+		"settings.city": "City",
+		"settings.country": "Country",
+		"settings.website": "Website",
+		"settings.financialSettings": "Financial Settings",
+		"settings.defaultCurrency": "Default Currency",
+		"settings.euro": "Euro",
+		"settings.usDollar": "US Dollar",
+		"settings.britishPound": "British Pound",
+		"settings.profileInformation": "Profile Information",
+		"settings.fullName": "Full Name",
+		"settings.changePassword": "Change Password",
+		"settings.currentPassword": "Current Password",
+		"settings.leaveBlank": "Leave blank if unchanged",
+		"settings.newPassword": "New Password",
+		"settings.enterNewPassword": "Enter New Password",
+		"settings.confirmNewPassword": "Confirm New Password",
+		"settings.languageRegional": "Language & Regional Settings",
+		"settings.display": "Display",
+		"settings.itemsPerPage": "Items Per Page",
+		"settings.emailNotifications": "Email Notifications",
+		"settings.desktopNotifications": "Desktop Notifications",
+		"settings.saveChanges": "Save Changes",
+		"settings.savePreferences": "Save Preferences",
+		"settings.saveCompanyDetails": "Save Company Details",
+		"settings.companyDetailsSaved": "Company details saved successfully",
+		"settings.saving": "Saving",
+		"settings.currency": "Currency",
+		"settings.darkMode": "Dark Mode",
+		"settings.theme": "Theme",
+
 		// Forms
 		"forms.required": "This field is required",
 		"forms.invalidEmail": "Invalid email address",
@@ -173,6 +216,8 @@ const resources = {
 
 		// Welcome Back
 		"welcome.back": "Welcome back!",
+		"welcome.notLoggedIn": "You are not logged in.",
+		"welcome.loginHere": "Login here",
 
 		}
 	},
@@ -206,6 +251,8 @@ const resources = {
 		"common.deleteQ": "Είστε σίγουροι ότι θέλετε να διαγράψετε to",
 		"common.update": "Ενημέρωση",
 		"common.download": "Λήψη",
+		"common.notAuthorizedMessage": "Δεν έχετε εξουσιοδότηση να δείτε αυτή τη σελίδα.",
+		"common.goToLogin": "Μετάβαση στη Σύνδεση",
 		
 		// Auth
 		"auth.login": "Σύνδεση",
@@ -221,7 +268,7 @@ const resources = {
 		"projects.create": "Δημιουργία Έργου",
 		"projects.name": "Όνομα Έργου",
 		"projects.location": "Τοποθεσία",
-		"projects.description": "Περιγραφή",
+		"projects.description": "Διαχειριστείτε τα έργα σας, τις εργασίες και τους σχετικούς πόρους αποτελεσματικά.",
 		"projects.employees": "Υπάλληλοι",
 		"projects.expenses": "Έξοδα",
 		"projects.invoices": "Τιμολόγια",
@@ -242,6 +289,7 @@ const resources = {
 		"projects.created": "Δημιουργήθηκε",
 		"project.offerFor": "Προσφορά για",
 		"projects.noInvoices": "Δεν υπάρχουν διαθέσιμα τιμολόγια",
+		"projects.goTo": "Μετάβαση στα Έργα",
 		
 		// Employees
 		"employees.title": "Υπάλληλοι",
@@ -273,6 +321,7 @@ const resources = {
 		"employees.alreadyAssigned": "Έχει ήδη ανατεθεί",
 		"employees.viewAllEmployees": "Προβολή Όλων των Υπαλλήλων",
 		"employees.rateWorkDaysInfo": "Πληροφορίες για την Αμοιβή και τις Ημέρες Εργασίας",
+		"employees.description": "Manage the employees, their roles, and assignments within your projects.",
 
 		// Expenses
 		"expenses.title": "Έξοδα",
@@ -297,7 +346,8 @@ const resources = {
 		"invoices.createdAt": "Ημερομηνία Δημιουργίας",
 		"invoices.noInvoices": "Δεν υπάρχουν τιμολόγια ακόμη",
 		"invoices.goTo": "Μετάβαση στα Τιμολόγια",
-		
+		"invoices.description": "Track and manage all invoices related to your projects and employees.",
+
 		// Settings
 		"settings.title": "Ρυθμίσεις",
 		"settings.user": "Ρυθμίσεις Χρήστη",
@@ -307,7 +357,44 @@ const resources = {
 		"settings.timezone": "Ζώνη Ώρας",
 		"settings.dateFormat": "Μορφή Ημερομηνίας",
 		"settings.notifications": "Ειδοποιήσεις",
-		
+		"settings.basicInformation": "Βασικές Πληροφορίες",
+		"settings.companyName": "Όνομα Εταιρείας",
+		"settings.vatNumber": "Αριθμός ΦΠΑ",
+		"settings.contactInformation": "Πληροφορίες Επικοινωνίας",
+		"settings.emailAddress": "Διεύθυνση Email",
+		"settings.phoneNumber": "Αριθμός Τηλεφώνου",
+		"settings.addressInformation": "Πληροφορίες Διεύθυνσης",
+		"settings.address": "Διεύθυνση",
+		"settings.city": "Πόλη",
+		"settings.country": "Χώρα",
+		"settings.website": "Ιστοσελίδα",
+		"settings.financialSettings": "Οικονομικές Ρυθμίσεις",
+		"settings.defaultCurrency": "Προεπιλεγμένο Νόμισμα",
+		"settings.euro": "Ευρώ",
+		"settings.usDollar": "Δολάριο ΗΠΑ",
+		"settings.britishPound": "Βρετανική Λίρα",
+		"settings.profileInformation": "Πληροφορίες Προφίλ",
+		"settings.fullName": "Πλήρες Όνομα",
+		"settings.changePassword": "Αλλαγή Κωδικού",
+		"settings.currentPassword": "Τρέχων Κωδικός",
+		"settings.leaveBlank": "Αφήστε κενό αν δεν αλλάξει",
+		"settings.newPassword": "Νέος Κωδικός",
+		"settings.enterNewPassword": "Εισάγετε Νέο Κωδικό",
+		"settings.confirmNewPassword": "Επιβεβαίωση Νέου Κωδικού",
+		"settings.languageRegional": "Γλώσσα & Περιφερειακές Ρυθμίσεις",
+		"settings.display": "Οθόνη",
+		"settings.itemsPerPage": "Αντικείμενα ανά Σελίδα",
+		"settings.emailNotifications": "Ειδοποιήσεις Email",
+		"settings.desktopNotifications": "Ειδοποιήσεις Υπολογιστή",
+		"settings.saveChanges": "Αποθήκευση Αλλαγών",
+		"settings.savePreferences": "Αποθήκευση Προτιμήσεων",
+		"settings.saveCompanyDetails": "Αποθήκευση Στοιχείων Εταιρείας",
+	"settings.companyDetailsSaved": "Τα στοιχεία της εταιρείας αποθηκεύτηκαν επιτυχώς",
+		"settings.saving": "Δουλειά σε εξέλιξη",
+		"settings.currency": "Monedha",
+		"settings.darkMode": "Modaliteti i Errët",
+		"settings.theme": "Θέμα",
+
 		// Forms
 		"forms.required": "Αυτό το πεδίο είναι υποχρεωτικό",
 		"forms.invalidEmail": "Μη έγκυρη διεύθυνση email",
@@ -347,6 +434,8 @@ const resources = {
 
 		// Welcome Back
 		"welcome.back": "Καλώς ήρθατε πίσω!",
+		"welcome.notLoggedIn": "Δεν έχετε συνδεθεί.",
+		"welcome.loginHere": "Συνδεθείτε εδώ",
 
 		}
 	},
@@ -395,7 +484,7 @@ const resources = {
 		"projects.create": "Krijo Projekt",
 		"projects.name": "Emri i Projektit",
 		"projects.location": "Vendndodhja",
-		"projects.description": "Përshkrimi",
+		"projects.description": "Menaxhoni projektet tuaja, detyrat dhe burimet e lidhura në mënyrë efektive.",
 		"projects.employees": "Punonjësit",
 		"projects.expenses": "Shpenzimet",
 		"projects.invoices": "Faturat",
@@ -416,6 +505,7 @@ const resources = {
 		"projects.created": "U Krijua",
 		"project.offerFor": "Ofertë për",
 		"projects.noInvoices": "Nuk ka fatura të disponueshme",
+		"projects.goTo": "Shko te Projektet",
 		
 		// Employees
 		"employees.title": "Punonjësit",
@@ -447,6 +537,7 @@ const resources = {
 		"employees.alreadyAssigned": "Tashmë i caktuar",
 		"employees.viewAllEmployees": "Shiko të Gjithë Punonjësit",
 		"employees.rateWorkDaysInfo": "Përshkrimi i pagesës dhe ditëve të punës",
+		"employees.description": "Manage the employees, their roles, and assignments within your projects.",
 
 		// Expenses
 		"expenses.title": "Shpenzimet",
@@ -471,7 +562,8 @@ const resources = {
 		"invoices.createdAt": "Data e Krijimit",
 		"invoices.noInvoices": "Nuk ka fatura ende",
 		"invoices.goTo": "Shko te Faturat",
-		
+		"invoices.description": "Track and manage all invoices related to your projects and employees.",
+
 		// Settings
 		"settings.title": "Cilësimet",
 		"settings.user": "Cilësimet e Përdoruesit",
@@ -481,7 +573,41 @@ const resources = {
 		"settings.timezone": "Zona Kohore",
 		"settings.dateFormat": "Formati i Datës",
 		"settings.notifications": "Njoftimet",
-		
+		"settings.basicInformation": "Informacion Bazë",
+		"settings.companyName": "Emri i Kompanisë",
+		"settings.vatNumber": "Numri i VAT",
+		"settings.contactInformation": "Informacioni i Kontaktit",
+		"settings.emailAddress": "Adresa e Email-it",
+		"settings.phoneNumber": "Numri i Telefonit",
+		"settings.addressInformation": "Informacioni i Adresës",
+		"settings.address": "Adresa",
+		"settings.city": "Qyteti",
+		"settings.country": "Shteti",
+		"settings.website": "Webfaqja",
+		"settings.financialSettings": "Cilësimet Financiare",
+		"settings.defaultCurrency": "Monedha e Paracaktuar",
+		"settings.euro": "Euro",
+		"settings.usDollar": "Dollari amerikan",
+		"settings.britishPound": "Paundi britanik",
+		"settings.profileInformation": "Informacioni i Profilit",
+		"settings.fullName": "Emri i Plotë",
+		"settings.changePassword": "Ndrysho Fjalëkalimin",
+		"settings.currentPassword": "Fjalëkalimi Aktual",
+		"settings.leaveBlank": "Lëreni bosh nëse nuk ndryshon",
+		"settings.newPassword": "Fjalëkalimi i Ri",
+		"settings.enterNewPassword": "Shkruani Fjalëkalimin e Ri",
+		"settings.confirmNewPassword": "Konfirmo Fjalëkalimin e Ri",
+		"settings.languageRegional": "Gjuha & Cilësimet Rajonale",
+		"settings.display": "Shfaqja",
+		"settings.itemsPerPage": "Artikuj për Faqe",
+		"settings.emailNotifications": "Njoftimet me Email",
+		"settings.desktopNotifications": "Njoftimet në Desktop",
+		"settings.saveChanges": "Ruaj Ndryshimet",
+		"settings.savePreferences": "Ruaj Preferencat",
+		"settings.saveCompanyDetails": "Ruaj Detajet e Kompanisë",
+	"settings.companyDetailsSaved": "Detajet e kompanisë u ruajtën me sukses",
+		"settings.saving": "Duke ruajtur",
+
 		// Forms
 		"forms.required": "Kjo fushë është e detyrueshme",
 		"forms.invalidEmail": "Adresa e email-it është e pavlefshme",
@@ -520,7 +646,10 @@ const resources = {
 		"projects.table.actions": "Veprimet",
 
 		// Welcome Back
-		"welcome.back": "Mirë se u ktheve!"
+		"welcome.back": "Mirë se u ktheve!",
+		"welcome.notLoggedIn": "Nuk jeni të kyçur.",
+		"welcome.loginHere": "Kyçuni këtu",
+
 		}
 	}
 };

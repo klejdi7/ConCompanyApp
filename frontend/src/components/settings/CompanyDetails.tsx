@@ -10,14 +10,16 @@ export default function CompanyDetails() {
 	const [company, setCompany] = useState({
 		name: "",
 		email: "",
-		phone: "",
+		phoneNumber: "",
 		address: "",
 		city: "",
 		country: "",
 		vatNumber: "",
 		website: "",
-		currency: "EUR"
+		currency: "EUR",
+		contactInfo: ""
 	});
+	const [companyId, setCompanyId] = useState<number | null>(null);
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -27,9 +29,21 @@ export default function CompanyDetails() {
 
 	const loadCompanyDetails = async () => {
 		try {
-			const response = await api.get("/api/company/details");
+			const response = await api.get("/api/companies");
 			if (response.data) {
-				setCompany(response.data);
+				setCompany({
+					name: response.data.name || "",
+					email: response.data.email || "",
+					phoneNumber: response.data.phoneNumber || "",
+					address: response.data.address || "",
+					city: response.data.city || "",
+					country: response.data.country || "",
+					vatNumber: response.data.vatNumber || "",
+					website: response.data.website || "",
+					currency: response.data.currency || "EUR",
+					contactInfo: response.data.contactInfo || ""
+				});
+				setCompanyId(response.data.id);
 			}
 		} catch (error) {
 			console.error("Failed to load company details");
@@ -42,12 +56,18 @@ export default function CompanyDetails() {
 		setMessage({ type: "", text: "" });
 
 		try {
-			await api.put("/api/company/details", company);
-			setMessage({ type: "success", text: "Company details saved successfully" });
+			if (companyId) {
+				await api.put(`/api/companies/${companyId}`, company);
+				setMessage({ type: "success", text: t("settings.companyDetailsSaved") });
+			} else {
+				const response = await api.post("/api/companies", company);
+				setCompanyId(response.data.id);
+				setMessage({ type: "success", text: t("settings.companyDetailsSaved") });
+			}
 		} catch (error: any) {
 			setMessage({ 
 				type: "error", 
-				text: error.response?.data?.error || "Failed to save company details" 
+				text: error.response?.data?.error || t("settings.companyDetailsSaveFailed")
 			});
 		} finally {
 			setLoading(false);
@@ -63,7 +83,6 @@ export default function CompanyDetails() {
 
 	return (
 		<div>
-			<h5>{t("settings.company")}</h5>
 			<form onSubmit={handleSubmit}>
 				{/* Basic Company Information */}
 				<div className="mb-4">
@@ -120,8 +139,8 @@ export default function CompanyDetails() {
 								<input
 									type="tel"
 									className="form-control"
-									name="phone"
-									value={company.phone}
+									name="phoneNumber"
+									value={company.phoneNumber}
 									onChange={handleChange}
 								/>
 							</div>

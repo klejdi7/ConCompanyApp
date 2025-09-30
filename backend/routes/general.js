@@ -6,6 +6,15 @@ import * as f from "./functions.js";
 const router = express.Router();
 const prisma = new PrismaClient();
 
+const defaultPreferences = {
+	language: "en",
+	timezone: "Europe/Athens", 
+	dateFormat: "DD/MM/YYYY",
+	currency: "EUR",
+	itemsPerPage: 10,
+	emailNotifications: true,
+	darkMode: false
+};
 
 /*
 Roles CRUD
@@ -232,6 +241,24 @@ router.get("/employees/:id/projects", async (req, res) => {
 
 	res.json(projectEmployees);
 
+});
+
+// Update projectEmployee rate and workDays
+router.put("/project-employees/:id", authMiddleware, async (req, res) => {
+	try {
+		const id = Number(req.params.id);
+		const { projectId, rate, workDays } = req.body;
+
+		const updatedProjectEmployee = await prisma.projectEmployee.update({
+			where: { id },
+			data: { rate, workDays },
+		});
+
+		res.json(updatedProjectEmployee);
+	} catch (err) {
+		console.error("Error updating project employee:", err);
+		res.status(500).json({ error: "Failed to update project employee" });
+	}
 });
 
 router.post("/projects/:projectId/assign", authMiddleware, async (req, res) => {
@@ -473,21 +500,210 @@ router.get("/me", authMiddleware, async (req, res) => {
 	}
 });
 
-// Update projectEmployee rate and workDays
-router.put("/project-employees/:id", authMiddleware, async (req, res) => {
+router.get("/user/preferences", authMiddleware, async (req, res) => {
 	try {
-		const id = Number(req.params.id);
-		const { projectId, rate, workDays } = req.body;
-
-		const updatedProjectEmployee = await prisma.projectEmployee.update({
-			where: { id },
-			data: { rate, workDays },
+		const user = await prisma.user.findUnique({
+			where: { id: req.user.userId },
+			select: { preferences: true }
 		});
 
-		res.json(updatedProjectEmployee);
+		if (!user) {
+			return res.status(404).json({ error: "User not found" });
+		}
+
+		// If no preferences exist, return defaults
+		const userPreferences = user.preferences || defaultPreferences;
+		
+		// Merge with defaults to ensure all fields exist
+		const preferences = { ...defaultPreferences, ...userPreferences };
+
+		res.json(preferences);
+	} catch (error) {
+		console.error("Get preferences error:", error);
+		res.status(500).json({ error: "Failed to get user preferences" });
+	}
+});
+
+// Update user preferences
+router.put("/user/preferences", authMiddleware, async (req, res) => {
+	try {
+		const {
+			language,
+			timezone,
+			dateFormat,
+			currency,
+			itemsPerPage,
+			emailNotifications,
+			darkMode
+		} = req.body;
+
+		// Validate preferences
+		const validLanguages = ["en", "el", "sq"];
+		const validTimezones = [
+			"Europe/Athens", "Europe/London", "Europe/Berlin", 
+			"Europe/Paris", "Europe/Rome", "Europe/Madrid", "UTC"
+		];
+		const validDateFormats = ["DD/MM/YYYY", "MM/DD/YYYY", "YYYY-MM-DD"];
+		const validCurrencies = ["EUR", "USD", "GBP", "ALL"];
+		const validItemsPerPage = [5, 10, 25, 50];
+
+		if (language && !validLanguages.includes(language)) {
+			return res.status(400).json({ error: "Invalid language" });
+		}
+		if (timezone && !validTimezones.includes(timezone)) {
+			return res.status(400).json({ error: "Invalid timezone" });
+		}
+		if (dateFormat && !validDateFormats.includes(dateFormat)) {
+			return res.status(400).json({ error: "Invalid date format" });
+		}
+		if (currency && !validCurrencies.includes(currency)) {
+			return res.status(400).json({ error: "Invalid currency" });
+		}
+		if (itemsPerPage && !validItemsPerPage.includes(Number(itemsPerPage))) {
+			return res.status(400).json({ error: "Invalid items per page" });
+		}
+
+		// Build preferences object
+		const preferences = {
+			language: language || "en",
+			timezone: timezone || "Europe/Athens",
+			dateFormat: dateFormat || "DD/MM/YYYY", 
+			currency: currency || "EUR",
+			itemsPerPage: Number(itemsPerPage) || 10,
+			emailNotifications: Boolean(emailNotifications),
+			darkMode: Boolean(darkMode)
+		};
+
+		// Update user preferences
+		const updatedUser = await prisma.user.update({
+			where: { id: req.user.userId },
+			data: { preferences },
+			select: { preferences: true }
+		});
+
+		res.json(updatedUser.preferences);
+	} catch (error) {
+		console.error("Update preferences error:", error);
+		res.status(500).json({ error: "Failed to update user preferences" });
+	}
+});
+
+/**
+ * 
+ * Company
+ */
+
+// Get all companies for the authenticated user
+router.get("/companies", authMiddleware, async (req, res) => {
+	try {
+		const userId = req.user.userId;
+		const userCompany = await prisma.userCompany.findFirst({
+		where: { userId },
+		include: { company: true },
+		});
+
+		if (!userCompany) return res.status(404).json({ error: "No company found for the user" });
+
+		res.json(userCompany.company);
 	} catch (err) {
-		console.error("Error updating project employee:", err);
-		res.status(500).json({ error: "Failed to update project employee" });
+		console.error("Error fetching company:", err);
+		res.status(500).json({ error: "Failed to fetch company" });
+	}
+});
+
+// Create a new company and associate it with the authenticated user
+router.post("/companies", authMiddleware, async (req, res) => {
+	try {
+		const userId = req.user.userId;
+
+		// Check if the user already has a company
+		const existingUserCompany = await prisma.userCompany.findFirst({
+		where: { userId },
+		});
+
+		if (existingUserCompany) {
+		return res.status(400).json({ error: "User already has a company" });
+		}
+
+		const {
+			name,
+			vatNumber,
+			contactInfo,
+			email,
+			phoneNumber,
+			address,
+			city,
+			country,
+			website,
+			currency,
+		} = req.body;
+
+		const company = await prisma.company.create({
+			data: {
+				name,
+				vatNumber,
+				contactInfo,
+				email,
+				phoneNumber,
+				address,
+				city,
+				country,
+				website,
+				currency,
+			},
+		});
+
+		await prisma.userCompany.create({
+			data: {
+				userId,
+				companyId: company.id,
+			},
+		});
+
+		res.json(company);
+	} catch (err) {
+		console.error("Error creating company:", err);
+		res.status(500).json({ error: "Failed to create company" });
+	}
+});
+
+// Update company details
+router.put("/companies/:id", authMiddleware, async (req, res) => {
+	try {
+		const companyId = Number(req.params.id);
+			const {
+			name,
+			vatNumber,
+			contactInfo,
+			email,
+			phoneNumber,
+			address,
+			city,
+			country,
+			website,
+			currency,
+		} = req.body;
+
+		const company = await prisma.company.update({
+			where: { id: companyId },
+			data: {
+				name,
+				vatNumber,
+				contactInfo,
+				email,
+				phoneNumber,
+				address,
+				city,
+				country,
+				website,
+				currency,
+			},
+		});
+
+		res.json(company);
+	} catch (err) {
+		console.error("Error updating company:", err);
+		res.status(500).json({ error: "Failed to update company" });
 	}
 });
 

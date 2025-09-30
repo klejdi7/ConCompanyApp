@@ -28,7 +28,7 @@ export default function UserSettings({ user }: UserSettingsProps) {
 
 		try {
 			// Update user profile
-			await api.put("/api/user/profile", {
+			await api.post("/auth/user/update", {
 				name: formData.name,
 				email: formData.email
 			});
@@ -39,7 +39,7 @@ export default function UserSettings({ user }: UserSettingsProps) {
 					setMessage({ type: "error", text: "New passwords do not match" });
 					return;
 				}
-				await api.put("/api/user/password", {
+				await api.put("/auth/user/password", {
 					currentPassword: formData.currentPassword,
 					newPassword: formData.newPassword
 				});
@@ -74,7 +74,7 @@ export default function UserSettings({ user }: UserSettingsProps) {
 
 	return (
 		<div>
-			<h5>{t("settings.user")}</h5>
+			<hr/>
 			<form onSubmit={handleSubmit}>
 				{/* Profile Information */}
 				<div className="mb-4">

@@ -10,17 +10,32 @@ export default function Preferences() {
 		language: "en",
 		timezone: "Europe/Athens",
 		dateFormat: "DD/MM/YYYY",
+		currency: "EUR",
 		itemsPerPage: 10,
 		emailNotifications: true,
-		desktopNotifications: false
+		darkMode: false
 	});
 	const [loading, setLoading] = useState(false);
 	const [message, setMessage] = useState({ type: "", text: "" });
+	const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
 	useEffect(() => {
 		// Load user preferences
 		loadPreferences();
 	}, []);
+
+	useEffect(() => {
+		document.documentElement.setAttribute("data-bs-theme", theme);
+		localStorage.setItem("theme", theme);
+	}, [theme]);
+
+	// Update the darkMode state in preferences when the theme changes
+	useEffect(() => {
+		setPreferences((prev: typeof preferences) => ({
+			...prev,
+			darkMode: theme === "dark"
+		}));
+	}, [theme]);
 
 	const loadPreferences = async () => {
 		try {
@@ -63,9 +78,17 @@ export default function Preferences() {
 		}
 	};
 
+	// Update the theme state when the switch is toggled
+	const handleDarkModeToggle = () => {
+		const newTheme = theme === "light" ? "dark" : "light";
+		setTheme(newTheme);
+		localStorage.setItem("theme", newTheme);
+		// Manually dispatch a storage event for immediate update in other components
+		window.dispatchEvent(new StorageEvent("storage", { key: "theme", newValue: newTheme }));
+	};
+
 	return (
 		<div>
-			<h5>{t("settings.preferences")}</h5>
 			<form onSubmit={handleSubmit}>
 				{/* Language & Regional Settings */}
 				<div className="mb-4">
@@ -96,8 +119,12 @@ export default function Preferences() {
 									onChange={handleChange}
 								>
 									<option value="Europe/Athens">Athens (GMT+2)</option>
+									<option value="Europe/London">London (GMT+0)</option>
 									<option value="Europe/Berlin">Berlin (GMT+1)</option>
-									<option value="UTC">UTC</option>
+									<option value="Europe/Paris">Paris (GMT+1)</option>
+									<option value="Europe/Rome">Rome (GMT+1)</option>
+									<option value="Europe/Madrid">Madrid (GMT+1)</option>
+									<option value="UTC">UTC (GMT+0)</option>
 								</select>
 							</div>
 						</div>
@@ -123,11 +150,27 @@ export default function Preferences() {
 				<div className="mb-4">
 					<h5>{t("settings.display")}</h5>
 					<div className="row">
-						<div className="col-md-6">
+						<div className="col-md-4">
+							<div className="mb-3">
+								<label className="form-label">{t("settings.currency")}</label>
+								<select
+									className="form-select"
+									name="currency"
+									value={preferences.currency}
+									onChange={handleChange}
+								>
+									<option value="EUR">Euro (€)</option>
+									<option value="USD">US Dollar ($)</option>
+									<option value="GBP">British Pound (£)</option>
+									<option value="ALL">Albanian Lek (L)</option>
+								</select>
+							</div>
+						</div>
+						<div className="col-md-4">
 							<div className="mb-3">
 								<label className="form-label">{t("settings.itemsPerPage")}</label>
 								<select
-									className="form-select"
+								className="form-select"
 									name="itemsPerPage"
 									value={preferences.itemsPerPage}
 									onChange={handleChange}
@@ -142,9 +185,9 @@ export default function Preferences() {
 					</div>
 				</div>
 
-				{/* Notification Settings */}
+				{/* Notification & Theme Settings */}
 				<div className="mb-4">
-					<h5>{t("settings.notifications")}</h5>
+					<h5>{t("settings.notifications")} & {t("settings.theme")}</h5>
 					<div className="row">
 						<div className="col-md-6">
 							<div className="form-check form-switch mb-3">
@@ -161,11 +204,11 @@ export default function Preferences() {
 								<input
 									className="form-check-input"
 									type="checkbox"
-									name="desktopNotifications"
-									checked={preferences.desktopNotifications}
-									onChange={handleChange}
+									name="darkMode"
+									checked={preferences.darkMode}
+									onChange={handleDarkModeToggle}
 								/>
-								<label className="form-check-label">{t("settings.desktopNotifications")}</label>
+								<label className="form-check-label">{t("settings.darkMode")}</label>
 							</div>
 						</div>
 					</div>

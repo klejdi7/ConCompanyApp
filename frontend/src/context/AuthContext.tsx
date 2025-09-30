@@ -6,6 +6,13 @@ interface User {
 	id: number;
 	name: string;
 	email: string;
+	preferences: {
+		language: string;
+		timezone: string;
+		dateFormat: string;
+		currency: string;
+		darkMode: boolean;
+	};
 }
 
 interface AuthContextType {
@@ -39,10 +46,28 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	}, []);
 
+	// Apply theme when user or preferences change
+	useEffect(() => {
+		if (user && user.preferences) {
+			const theme = user.preferences.darkMode ? "dark" : "light";
+			document.documentElement.setAttribute("data-bs-theme", theme);
+			localStorage.setItem("theme", theme);
+		}
+	}, [user]);
+
 	const fetchUser = async (jwt: string) => {
 		try {
-			const res = await api.get("http://localhost:4000/api/me");
-			setUser(res.data);
+			const userResponse = await api.get("http://localhost:4000/api/me");
+			const preferencesResponse = await api.get("http://localhost:4000/api/user/preferences");
+			const user = { ...userResponse.data, preferences: preferencesResponse.data };
+			setUser(user);
+			// Apply theme immediately after fetching
+			if (user.preferences) {
+				const theme = user.preferences.darkMode ? "dark" : "light";
+				document.documentElement.setAttribute("data-bs-theme", theme);
+				localStorage.setItem("theme", theme);
+			}
+			return user;
 		} catch (err) {
 			console.error("Failed to fetch user:", err);
 			logout();
@@ -52,7 +77,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const login = async (newToken: string) => {
 		localStorage.setItem("token", newToken);
 		setToken(newToken);
-		await fetchUser(newToken);
+		const user = await fetchUser(newToken);
+		// Apply theme after login
+		if (user && user.preferences) {
+			const theme = user.preferences.darkMode ? "dark" : "light";
+			document.documentElement.setAttribute("data-bs-theme", theme);
+			localStorage.setItem("theme", theme);
+		}
 	};
 
 	const logout = () => {

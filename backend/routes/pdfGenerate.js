@@ -162,12 +162,22 @@ async function generateOfferPDF(filePath, project, totalAmount) {
 
 	const { companyInfo, expenses } = await getOfferData(project);
 
-	// Header: Company name left, info right
-	doc.fontSize(20).text(companyInfo.name, 50, 50);
+	// Header: Company logo (bold, styled) left, info right
+	doc.fontSize(28)
+		.font('Helvetica-Bold')
+		.fillColor('#2C3E50')
+		.text(companyInfo.name, 50, 50, {
+			align: 'left',
+			underline: false,
+			characterSpacing: 2
+		});
 	doc.fontSize(10)
+		.font('Helvetica')
+		.fillColor('black')
 		.text(`Email: ${companyInfo.email}`, 400, 50, { align: 'right' })
 		.text(`Address: ${companyInfo.address}`, 400, 65, { align: 'right' })
-		.text(`VAT: ${companyInfo.vat}`, 400, 80, { align: 'right' });
+		.text(`VAT: ${companyInfo.vat}`, 400, 80, { align: 'right' })
+		.text(`Website: ${companyInfo.website}`, 400, 95, { align: 'right' });
 
 	// Heading
 	doc.fontSize(16).text('OFFER', 50, 120);
@@ -210,17 +220,22 @@ async function generateOfferPDF(filePath, project, totalAmount) {
 	yPosition += 10;
 	doc.fontSize(12).text(`TOTAL: €${totalAmount.toFixed(2)}`, 400, yPosition, { align: 'right' });
 
-	// Finalize the PDF
 	doc.end();
 }
 
 async function getOfferData(project) {
+	const userCompany = await prisma.userCompany.findFirst({
+		where: { userId: project.userId },
+		include: { company: true }
+	});
+	const company = userCompany?.company || {};
 	return {
 		companyInfo: {
-			name: "Your Company Name",
-			email: "info@company.com",
-			address: "123 Business St, City",
-			vat: "VAT123456789"
+			name: company.name || "Your Company",
+			email: company.email || "info@company.com",
+			address: company.address || "123 Business St, City",
+			vat: company.vatNumber || "VAT123456789",
+			website: company.website || "www.company.com"
 		},
 		expenses: project.ProjectExpenses
 	};

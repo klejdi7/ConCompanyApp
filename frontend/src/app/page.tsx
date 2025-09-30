@@ -36,44 +36,44 @@ export default function Home() {
 			)}
 
 			<div className="row mt-4">
-				<div className="col-md-4">
-					<div className="card shadow-sm">
-						<div className="card-body">
+				<div className="col-md-4 d-flex">
+					<div className="card shadow-sm h-130 w-100 d-flex flex-column">
+						<div className="card-body d-flex flex-column">
 							<h5 className="card-title">👷 {t("employees.title")}</h5>
-							<p className="card-text">
-								{t("employees.description")}
-							</p>
-							<Link href="/employees" className="btn btn-primary">
-								{t("employees.goTo")}
-							</Link>
+							<p className="card-text">{t("employees.description")}</p>
+							<div className="mt-auto">
+								<Link href="/employees" className="btn btn-primary">
+									{t("employees.goTo")}
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="col-md-4">
-					<div className="card shadow-sm">
-						<div className="card-body">
+				<div className="col-md-4 d-flex">
+					<div className="card shadow-sm h-130 w-100 d-flex flex-column">
+						<div className="card-body d-flex flex-column">
 							<h5 className="card-title">🏗️ {t("projects.title")}</h5>
-							<p className="card-text">
-								{t("projects.description")}
-							</p>
-							<Link href="/projects" className="btn btn-primary">
-								{t("projects.goTo")}
-							</Link>
+							<p className="card-text">{t("projects.description")}</p>
+							<div className="mt-auto">
+								<Link href="/projects" className="btn btn-primary">
+									{t("projects.goTo")}
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div className="col-md-4">
-					<div className="card shadow-sm">
-						<div className="card-body">
+				<div className="col-md-4 d-flex">
+					<div className="card shadow-sm h-130 w-100 d-flex flex-column">
+						<div className="card-body d-flex flex-column">
 							<h5 className="card-title">💰 {t("invoices.title")}</h5>
-							<p className="card-text">
-								{t("invoices.description")}
-							</p>
-							<Link href="/invoices" className="btn btn-primary">
-								{t("invoices.goTo")}
-							</Link>
+							<p className="card-text">{t("invoices.description")}</p>
+							<div className="mt-auto">
+								<Link href="/invoices" className="btn btn-primary">
+									{t("invoices.goTo")}
+								</Link>
+							</div>
 						</div>
 					</div>
 				</div>
